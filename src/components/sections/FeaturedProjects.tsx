@@ -104,7 +104,7 @@ export function FeaturedProjects() {
         {
             title: "Portfolio Website",
             description: "A portfolio website built to improve my TypeScript and frontend development skills, designed to highlight my projects and demonstrate my employability.",
-            imageSrc: null, // Set to null instead of empty string
+            imageSrc: "",
             tags: ["React", "TypeScript", "Next.js", "Shadcn-UI", "TailwindCSS"],
             liveUrl: "",
             githubUrl: "https://github.com/emcpherson02/portfolio-website",

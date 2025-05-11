@@ -14,7 +14,7 @@ export function Contact() {
                         Get In Touch
                     </h2>
                     <p className="text-muted-foreground max-w-2xl">
-                        Feel free to reach out if you're looking for a developer, have a question, or just want to connect.
+                        Feel free to reach out if you&#39;re looking for a developer, have a question, or just want to connect.
                     </p>
                 </div>
 
