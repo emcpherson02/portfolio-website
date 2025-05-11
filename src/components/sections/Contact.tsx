@@ -1,24 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Mail, MapPin, Clock, Calendar } from "lucide-react";
 
 export function Contact() {
     return (
         <section className="py-20 bg-background" id="contact">
             <div className="container">
-                <div className="text-center mb-16">
+                <div className="mb-16">
+                    <Badge variant="outline" className="mb-4">Contact</Badge>
                     <h2 className="text-3xl md:text-4xl font-bold mb-4">
                         Get In Touch
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
+                    <p className="text-muted-foreground max-w-2xl">
                         Feel free to reach out if you&#39;re looking for a developer, have a question, or just want to connect.
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                     {/* Contact Form */}
-                    <div className="rounded-lg border bg-card p-8 shadow-sm">
+                    <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
                         <form className="space-y-6">
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div className="space-y-2">
@@ -57,19 +59,23 @@ export function Contact() {
                     </div>
 
                     {/* Contact Info */}
-                    <div className="space-y-8">
-                        <div className="rounded-lg border bg-card p-8 shadow-sm">
+                    <div className="space-y-6">
+                        <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
                             <h3 className="text-xl font-bold mb-6">Contact Information</h3>
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <div className="flex items-start gap-4">
-                                    <MapPin className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                        <MapPin className="h-5 w-5" />
+                                    </div>
                                     <div>
                                         <h4 className="font-medium">Location</h4>
                                         <p className="text-muted-foreground">Belfast, United Kingdom</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                        <Mail className="h-5 w-5" />
+                                    </div>
                                     <div>
                                         <h4 className="font-medium">Email</h4>
                                         <a
@@ -83,14 +89,30 @@ export function Contact() {
                             </div>
                         </div>
 
-                        <div className="rounded-lg border bg-card p-8 shadow-sm">
-                            <h3 className="text-xl font-bold mb-4">Availability</h3>
-                            <p className="text-muted-foreground mb-6">
+                        <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
+                            <h3 className="text-xl font-bold mb-6">Availability</h3>
 
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                Usually replies within 24 hours
-                            </p>
+                            <div className="space-y-6">
+                                <div className="flex items-start gap-4">
+                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                        <Clock className="h-5 w-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium">Response Time</h4>
+                                        <p className="text-muted-foreground">Usually within 24 hours</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                        <Calendar className="h-5 w-5" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium">Work Status</h4>
+                                        <p className="text-muted-foreground">Open to full-time opportunities and freelance projects</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
