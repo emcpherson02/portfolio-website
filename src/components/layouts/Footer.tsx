@@ -6,11 +6,11 @@ export function Footer() {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="border-t py-12 bg-muted/20">
+        <footer className="w-full border-t py-10 sm:py-12 bg-muted/20">
             <div className="container">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
                     {/* Brand Column */}
-                    <div className="md:col-span-1">
+                    <div className="col-span-2 sm:col-span-2 md:col-span-1">
                         <Link href="/" className="font-bold text-xl flex items-center gap-2">
                             <span className="text-primary font-mono">EM</span>
                             <span>Elliott McPherson</span>
@@ -21,7 +21,7 @@ export function Footer() {
                     </div>
 
                     {/* Navigation Columns */}
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         <h3 className="font-medium">Pages</h3>
                         <ul className="space-y-2">
                             <li>
@@ -47,7 +47,7 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         <h3 className="font-medium">Resources</h3>
                         <ul className="space-y-2">
                             <li>
@@ -74,7 +74,7 @@ export function Footer() {
                         </ul>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         <h3 className="font-medium">Contact</h3>
                         <ul className="space-y-2">
                             <li>
@@ -105,44 +105,47 @@ export function Footer() {
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row justify-between items-center mt-16 pt-8 border-t">
-                    <p className="text-sm text-muted-foreground mb-4 md:mb-0">
+                <div className="flex flex-col sm:flex-row justify-between items-center mt-10 pt-6 border-t">
+                    <p className="text-sm text-muted-foreground mb-4 sm:mb-0">
                         © {currentYear} Elliott McPherson. All rights reserved.
                     </p>
 
-                    <div className="flex gap-4">
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
+                    <div className="flex gap-3">
+                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
                             <Link
                                 href="https://github.com/emcpherson02"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="GitHub"
                             >
                                 <Github className="h-4 w-4" />
                                 <span className="sr-only">GitHub</span>
                             </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
+                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
                             <Link
                                 href="https://linkedin.com/in/elliott-mcpherson"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="LinkedIn"
                             >
                                 <Linkedin className="h-4 w-4" />
                                 <span className="sr-only">LinkedIn</span>
                             </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
+                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
                             <Link
                                 href="https://twitter.com/elliotmcpherson"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                aria-label="Twitter"
                             >
                                 <Twitter className="h-4 w-4" />
                                 <span className="sr-only">Twitter</span>
                             </Link>
                         </Button>
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-9 w-9">
-                            <Link href="mailto:elliott.mcpherson985@gmail.com">
+                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
+                            <Link href="mailto:elliott.mcpherson985@gmail.com" aria-label="Email">
                                 <Mail className="h-4 w-4" />
                                 <span className="sr-only">Email</span>
                             </Link>

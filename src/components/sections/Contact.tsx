@@ -6,23 +6,23 @@ import { Mail, MapPin, Clock, Calendar } from "lucide-react";
 
 export function Contact() {
     return (
-        <section className="py-20 bg-background" id="contact">
+        <section className="w-full py-16 sm:py-20 bg-background" id="contact">
             <div className="container">
-                <div className="mb-16">
+                <div className="mb-10 sm:mb-16">
                     <Badge variant="outline" className="mb-4">Contact</Badge>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
                         Get In Touch
                     </h2>
                     <p className="text-muted-foreground max-w-2xl">
-                        Feel free to reach out if you&#39;re looking for a developer, have a question, or just want to connect.
+                        Feel free to reach out if you're looking for a developer, have a question, or just want to connect.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
                     {/* Contact Form */}
-                    <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all">
+                        <form className="space-y-5 sm:space-y-6">
+                            <div className="grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2">
                                 <div className="space-y-2">
                                     <label htmlFor="name" className="text-sm font-medium">
                                         Name
@@ -60,9 +60,9 @@ export function Contact() {
 
                     {/* Contact Info */}
                     <div className="space-y-6">
-                        <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
-                            <h3 className="text-xl font-bold mb-6">Contact Information</h3>
-                            <div className="space-y-6">
+                        <div className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all">
+                            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Contact Information</h3>
+                            <div className="space-y-5 sm:space-y-6">
                                 <div className="flex items-start gap-4">
                                     <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
                                         <MapPin className="h-5 w-5" />
@@ -89,10 +89,10 @@ export function Contact() {
                             </div>
                         </div>
 
-                        <div className="rounded-xl border bg-card p-8 shadow-sm hover:shadow-md transition-all">
-                            <h3 className="text-xl font-bold mb-6">Availability</h3>
+                        <div className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all">
+                            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Availability</h3>
 
-                            <div className="space-y-6">
+                            <div className="space-y-5 sm:space-y-6">
                                 <div className="flex items-start gap-4">
                                     <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
                                         <Clock className="h-5 w-5" />
