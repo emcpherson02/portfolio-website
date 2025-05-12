@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 interface NavbarProps {
     className?: string;
@@ -14,9 +15,30 @@ export function Navbar({ className }: NavbarProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [activeSection, setActiveSection] = useState('home');
+    const { scrollTo } = useSmoothScroll();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    // Handle smooth scrolling for navigation links
+    const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+        e.preventDefault();
+
+        // Close mobile menu if open
+        if (isMenuOpen) {
+            setIsMenuOpen(false);
+        }
+
+        // Extract the target ID from the href
+        const id = targetId.startsWith('#') ? targetId.substring(1) : targetId;
+
+        // Use smooth scroll hook to scroll to the target
+        scrollTo(id);
+
+        // Update URL without reloading the page
+        window.history.pushState({}, '', targetId);
     };
 
     // Handle window-related operations safely
@@ -44,12 +66,36 @@ export function Navbar({ className }: NavbarProps) {
             } else {
                 setScrolled(false);
             }
+
+            // Detect which section is currently in view
+            const sections = ['home', 'projects', 'skills', 'contact'];
+
+            let currentSection = 'home';
+            let minDistance = Infinity;
+
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const rect = section.getBoundingClientRect();
+                    const distance = Math.abs(rect.top - 100); // Distance from top with offset
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        currentSection = sectionId;
+                    }
+                }
+            });
+
+            setActiveSection(currentSection);
         };
 
         // Add event listeners
         window.addEventListener("resize", handleResize);
         document.addEventListener("mousedown", handleClickOutside);
         window.addEventListener("scroll", handleScroll);
+
+        // Initial scroll check
+        handleScroll();
 
         // Cleanup event listeners
         return () => {
@@ -85,24 +131,36 @@ export function Navbar({ className }: NavbarProps) {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center gap-6 lg:gap-8">
-                    <Link
-                        href="/"
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                    <a
+                        href="#home"
+                        onClick={(e) => handleNavClick(e, '#home')}
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            activeSection === 'home' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
                     >
                         Home
-                    </Link>
-                    <Link
-                        href="/#projects"
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                    </a>
+                    <a
+                        href="#projects"
+                        onClick={(e) => handleNavClick(e, '#projects')}
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            activeSection === 'projects' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
                     >
                         Projects
-                    </Link>
-                    <Link
-                        href="/#skills"
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                    </a>
+                    <a
+                        href="#skills"
+                        onClick={(e) => handleNavClick(e, '#skills')}
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            activeSection === 'skills' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
                     >
                         Skills
-                    </Link>
+                    </a>
                     <Link
                         href="/resume"
                         className="text-sm font-medium transition-colors hover:text-primary"
@@ -115,18 +173,29 @@ export function Navbar({ className }: NavbarProps) {
                     >
                         Blog
                     </Link>
-                    <Link
-                        href="/#contact"
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                    <a
+                        href="#contact"
+                        onClick={(e) => handleNavClick(e, '#contact')}
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            activeSection === 'contact' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
                     >
                         Contact
-                    </Link>
+                    </a>
                 </nav>
 
                 {/* CTA Button */}
                 <div className="hidden md:flex">
-                    <Button asChild variant="default" className="shadow-sm">
-                        <Link href="/#contact">Hire Me</Link>
+                    <Button
+                        variant="default"
+                        className="shadow-sm"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            scrollTo('contact');
+                        }}
+                    >
+                        Hire Me
                     </Button>
                 </div>
 
@@ -157,27 +226,36 @@ export function Navbar({ className }: NavbarProps) {
                 <div className="bg-background/95 backdrop-blur-md border-b shadow-sm">
                     <div className="container py-5">
                         <nav className="flex flex-col space-y-4">
-                            <Link
-                                href="/"
-                                className="text-sm font-medium transition-colors hover:text-primary py-2"
-                                onClick={() => setIsMenuOpen(false)}
+                            <a
+                                href="#home"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    activeSection === 'home' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#home')}
                             >
                                 Home
-                            </Link>
-                            <Link
-                                href="/#projects"
-                                className="text-sm font-medium transition-colors hover:text-primary py-2"
-                                onClick={() => setIsMenuOpen(false)}
+                            </a>
+                            <a
+                                href="#projects"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    activeSection === 'projects' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#projects')}
                             >
                                 Projects
-                            </Link>
-                            <Link
-                                href="/#skills"
-                                className="text-sm font-medium transition-colors hover:text-primary py-2"
-                                onClick={() => setIsMenuOpen(false)}
+                            </a>
+                            <a
+                                href="#skills"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    activeSection === 'skills' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#skills')}
                             >
                                 Skills
-                            </Link>
+                            </a>
                             <Link
                                 href="/resume"
                                 className="text-sm font-medium transition-colors hover:text-primary py-2"
@@ -192,17 +270,22 @@ export function Navbar({ className }: NavbarProps) {
                             >
                                 Blog
                             </Link>
-                            <Link
-                                href="/#contact"
-                                className="text-sm font-medium transition-colors hover:text-primary py-2"
-                                onClick={() => setIsMenuOpen(false)}
+                            <a
+                                href="#contact"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    activeSection === 'contact' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#contact')}
                             >
                                 Contact
-                            </Link>
-                            <Button asChild variant="default" className="w-full mt-2">
-                                <Link href="/#contact" onClick={() => setIsMenuOpen(false)}>
-                                    Hire Me
-                                </Link>
+                            </a>
+                            <Button variant="default" className="w-full mt-2" onClick={(e) => {
+                                e.preventDefault();
+                                setIsMenuOpen(false);
+                                scrollTo('contact');
+                            }}>
+                                Hire Me
                             </Button>
                         </nav>
                     </div>
