@@ -5,18 +5,18 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import { usePathname } from "next/navigation";
 
 interface NavbarProps {
     className?: string;
 }
 
 export function Navbar({ className }: NavbarProps) {
+    const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
-    const { scrollTo } = useSmoothScroll();
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -31,14 +31,26 @@ export function Navbar({ className }: NavbarProps) {
             setIsMenuOpen(false);
         }
 
-        // Extract the target ID from the href
-        const id = targetId.startsWith('#') ? targetId.substring(1) : targetId;
+        // Only do smooth scrolling if we're on the homepage
+        if (pathname === '/') {
+            // Extract the target ID from the href
+            const id = targetId.startsWith('#') ? targetId.substring(1) : targetId;
 
-        // Use smooth scroll hook to scroll to the target
-        scrollTo(id);
+            // Find the element to scroll to
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
 
-        // Update URL without reloading the page
-        window.history.pushState({}, '', targetId);
+            // Update URL without reloading the page
+            window.history.pushState({}, '', targetId);
+        } else {
+            // If we're not on the homepage, navigate to homepage with the hash
+            window.location.href = `/${targetId}`;
+        }
     };
 
     // Handle window-related operations safely
@@ -67,26 +79,29 @@ export function Navbar({ className }: NavbarProps) {
                 setScrolled(false);
             }
 
-            // Detect which section is currently in view
-            const sections = ['home', 'projects', 'skills', 'contact'];
+            // Only detect sections on homepage
+            if (pathname === '/') {
+                // Detect which section is currently in view
+                const sections = ['home', 'projects', 'skills', 'contact'];
 
-            let currentSection = 'home';
-            let minDistance = Infinity;
+                let currentSection = 'home';
+                let minDistance = Infinity;
 
-            sections.forEach(sectionId => {
-                const section = document.getElementById(sectionId);
-                if (section) {
-                    const rect = section.getBoundingClientRect();
-                    const distance = Math.abs(rect.top - 100); // Distance from top with offset
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        const rect = section.getBoundingClientRect();
+                        const distance = Math.abs(rect.top - 100); // Distance from top with offset
 
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        currentSection = sectionId;
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            currentSection = sectionId;
+                        }
                     }
-                }
-            });
+                });
 
-            setActiveSection(currentSection);
+                setActiveSection(currentSection);
+            }
         };
 
         // Add event listeners
@@ -103,7 +118,7 @@ export function Navbar({ className }: NavbarProps) {
             document.removeEventListener("mousedown", handleClickOutside);
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [isMenuOpen]);
+    }, [isMenuOpen, pathname]);
 
     return (
         <header
@@ -131,39 +146,41 @@ export function Navbar({ className }: NavbarProps) {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden md:flex items-center gap-6 lg:gap-8">
-                    <a
-                        href="#home"
-                        onClick={(e) => handleNavClick(e, '#home')}
+                    <Link
+                        href="/"
                         className={cn(
                             "text-sm font-medium transition-colors hover:text-primary relative py-1",
-                            activeSection === 'home' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                            pathname === '/' && activeSection === 'home' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
                         )}
                     >
                         Home
-                    </a>
-                    <a
-                        href="#projects"
-                        onClick={(e) => handleNavClick(e, '#projects')}
+                    </Link>
+                    <Link
+                        href="/#projects"
                         className={cn(
                             "text-sm font-medium transition-colors hover:text-primary relative py-1",
-                            activeSection === 'projects' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                            pathname === '/' && activeSection === 'projects' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
                         )}
+                        onClick={(e) => handleNavClick(e, '#projects')}
                     >
                         Projects
-                    </a>
-                    <a
-                        href="#skills"
-                        onClick={(e) => handleNavClick(e, '#skills')}
+                    </Link>
+                    <Link
+                        href="/#skills"
                         className={cn(
                             "text-sm font-medium transition-colors hover:text-primary relative py-1",
-                            activeSection === 'skills' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                            pathname === '/' && activeSection === 'skills' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
                         )}
+                        onClick={(e) => handleNavClick(e, '#skills')}
                     >
                         Skills
-                    </a>
+                    </Link>
                     <Link
                         href="/resume"
-                        className="text-sm font-medium transition-colors hover:text-primary"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary",
+                            pathname === '/resume' ? "text-primary" : ""
+                        )}
                     >
                         Resume
                     </Link>
@@ -173,16 +190,16 @@ export function Navbar({ className }: NavbarProps) {
                     >
                         Blog
                     </Link>
-                    <a
-                        href="#contact"
-                        onClick={(e) => handleNavClick(e, '#contact')}
+                    <Link
+                        href="/#contact"
                         className={cn(
                             "text-sm font-medium transition-colors hover:text-primary relative py-1",
-                            activeSection === 'contact' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                            pathname === '/' && activeSection === 'contact' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
                         )}
+                        onClick={(e) => handleNavClick(e, '#contact')}
                     >
                         Contact
-                    </a>
+                    </Link>
                 </nav>
 
                 {/* CTA Button */}
@@ -190,9 +207,12 @@ export function Navbar({ className }: NavbarProps) {
                     <Button
                         variant="default"
                         className="shadow-sm"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            scrollTo('contact');
+                        onClick={() => {
+                            if (pathname === '/') {
+                                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                            } else {
+                                window.location.href = '/#contact';
+                            }
                         }}
                     >
                         Hire Me
@@ -226,39 +246,42 @@ export function Navbar({ className }: NavbarProps) {
                 <div className="bg-background/95 backdrop-blur-md border-b shadow-sm">
                     <div className="container py-5">
                         <nav className="flex flex-col space-y-4">
-                            <a
-                                href="#home"
+                            <Link
+                                href="/"
                                 className={cn(
                                     "text-sm font-medium transition-colors hover:text-primary py-2",
-                                    activeSection === 'home' ? "text-primary" : ""
+                                    pathname === '/' && activeSection === 'home' ? "text-primary" : ""
                                 )}
-                                onClick={(e) => handleNavClick(e, '#home')}
+                                onClick={() => setIsMenuOpen(false)}
                             >
                                 Home
-                            </a>
-                            <a
-                                href="#projects"
+                            </Link>
+                            <Link
+                                href="/#projects"
                                 className={cn(
                                     "text-sm font-medium transition-colors hover:text-primary py-2",
-                                    activeSection === 'projects' ? "text-primary" : ""
+                                    pathname === '/' && activeSection === 'projects' ? "text-primary" : ""
                                 )}
                                 onClick={(e) => handleNavClick(e, '#projects')}
                             >
                                 Projects
-                            </a>
-                            <a
-                                href="#skills"
+                            </Link>
+                            <Link
+                                href="/#skills"
                                 className={cn(
                                     "text-sm font-medium transition-colors hover:text-primary py-2",
-                                    activeSection === 'skills' ? "text-primary" : ""
+                                    pathname === '/' && activeSection === 'skills' ? "text-primary" : ""
                                 )}
                                 onClick={(e) => handleNavClick(e, '#skills')}
                             >
                                 Skills
-                            </a>
+                            </Link>
                             <Link
                                 href="/resume"
-                                className="text-sm font-medium transition-colors hover:text-primary py-2"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/resume' ? "text-primary" : ""
+                                )}
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 Resume
@@ -270,21 +293,28 @@ export function Navbar({ className }: NavbarProps) {
                             >
                                 Blog
                             </Link>
-                            <a
-                                href="#contact"
+                            <Link
+                                href="/#contact"
                                 className={cn(
                                     "text-sm font-medium transition-colors hover:text-primary py-2",
-                                    activeSection === 'contact' ? "text-primary" : ""
+                                    pathname === '/' && activeSection === 'contact' ? "text-primary" : ""
                                 )}
                                 onClick={(e) => handleNavClick(e, '#contact')}
                             >
                                 Contact
-                            </a>
-                            <Button variant="default" className="w-full mt-2" onClick={(e) => {
-                                e.preventDefault();
-                                setIsMenuOpen(false);
-                                scrollTo('contact');
-                            }}>
+                            </Link>
+                            <Button
+                                variant="default"
+                                className="w-full mt-2"
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    if (pathname === '/') {
+                                        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                    } else {
+                                        window.location.href = '/#contact';
+                                    }
+                                }}
+                            >
                                 Hire Me
                             </Button>
                         </nav>
