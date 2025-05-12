@@ -1,39 +1,39 @@
+
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Code, Database, Layers, GitBranch, Server, Paintbrush } from "lucide-react";
+import {
+    Database,
+    Server,
+    FileCode,
+    Laptop,
+    Wrench,
+    Cloud
+} from "lucide-react";
 
 interface SkillCategoryProps {
     title: string;
     icon: React.ReactNode;
-    skills: { name: string; level: number }[];
+    skills: string[];
     className?: string;
 }
 
 function SkillCategory({ title, icon, skills, className }: SkillCategoryProps) {
     return (
-        <div className={cn("flex flex-col gap-4 p-5 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all", className)}>
+        <div className={cn(
+            "flex flex-col gap-4 p-5 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all",
+            className
+        )}>
             <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary">
                     {icon}
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold">{title}</h3>
             </div>
-            <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
                 {skills.map((skill) => (
-                    <div key={skill.name} className="space-y-1">
-                        <div className="flex justify-between text-xs sm:text-sm">
-                            <span>{skill.name}</span>
-                            <span className="text-muted-foreground">
-                                {skill.level > 8 ? "Expert" : skill.level > 6 ? "Advanced" : skill.level > 4 ? "Intermediate" : "Beginner"}
-                            </span>
-                        </div>
-                        <div className="h-1.5 sm:h-2 w-full bg-muted rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-primary transition-all rounded-full"
-                                style={{ width: `${skill.level * 10}%` }}
-                            />
-                        </div>
-                    </div>
+                    <Badge key={skill} variant="secondary" className="text-xs">
+                        {skill}
+                    </Badge>
                 ))}
             </div>
         </div>
@@ -42,27 +42,72 @@ function SkillCategory({ title, icon, skills, className }: SkillCategoryProps) {
 
 export function Skills() {
     const frontendSkills = [
-        { name: "React", level: 9 },
-        { name: "TypeScript", level: 8 },
-        { name: "Next.js", level: 8 },
-        { name: "TailwindCSS", level: 9 },
-        { name: "HTML/CSS", level: 9 },
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Next.js",
+        "TailwindCSS",
+        "HTML/CSS",
+        "Flutter",
+        "Responsive Design",
+        "Figma"
     ];
 
     const backendSkills = [
-        { name: "Node.js", level: 7 },
-        { name: "Express", level: 7 },
-        { name: "MongoDB", level: 6 },
-        { name: "PostgreSQL", level: 5 },
-        { name: "GraphQL", level: 6 },
+        "Java",
+        "Spring Boot",
+        "Node.js",
+        "Express",
+        "Python",
+        "C++",
+        "RESTful",
+        "Swift"
     ];
 
-    const toolsSkills = [
-        { name: "Git", level: 8 },
-        { name: "Docker", level: 6 },
-        { name: "AWS", level: 5 },
-        { name: "CI/CD", level: 7 },
-        { name: "Webpack", level: 6 },
+    const testingCiCdSkills = [
+        "Git",
+        "Jenkins",
+        "GitLab CI",
+        "Maven",
+        "Mockito",
+        "Jest / supertest",
+        "Cucumber (gherkin)",
+        "LocalStack",
+        "TDD",
+        "Pair Programming"
+    ];
+
+    const deploymentSkills = [
+        "AWS",
+        "GCP",
+        "Kubernetes",
+        "Spinnaker",
+        "Terraform",
+        "Docker",
+        "CloudRun",
+        "Firestore",
+        "ElastiCache",
+        "Lambda",
+        "EC2",
+        "SQS",
+        "SNS",
+        "S3"
+    ];
+
+    const databaseSkills = [
+        "NoSQL",
+        "MongoDB",
+        "SQL",
+        "DynamoDB"
+    ];
+
+    const monitoringSkills = [
+        "Snyk",
+        "Wireshark",
+        "DataDog",
+        "IDA",
+        "CloudWatch",
+        "K9S"
     ];
 
     return (
@@ -74,14 +119,14 @@ export function Skills() {
                         Skills & Technologies
                     </h2>
                     <p className="text-muted-foreground max-w-2xl">
-                        A comprehensive overview of my technical abilities and experience with various tools and technologies.
+                        A comprehensive overview of my technical abilities and experience across various domains of software development.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <SkillCategory
                         title="Frontend Development"
-                        icon={<Code className="h-5 w-5" />}
+                        icon={<Laptop className="h-5 w-5" />}
                         skills={frontendSkills}
                     />
                     <SkillCategory
@@ -90,76 +135,25 @@ export function Skills() {
                         skills={backendSkills}
                     />
                     <SkillCategory
-                        title="Tools & Deployment"
-                        icon={<GitBranch className="h-5 w-5" />}
-                        skills={toolsSkills}
+                        title="Testing & CI/CD"
+                        icon={<FileCode className="h-5 w-5" />}
+                        skills={testingCiCdSkills}
                     />
-                </div>
-
-                <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="p-4 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all">
-                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                <Layers className="h-4 sm:h-5 w-4 sm:w-5" />
-                            </div>
-                            <h3 className="text-base sm:text-lg font-semibold">Frameworks</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            <Badge className="text-xs">React</Badge>
-                            <Badge className="text-xs">Next.js</Badge>
-                            <Badge className="text-xs">Express</Badge>
-                            <Badge className="text-xs">Jest</Badge>
-                            <Badge className="text-xs">React Native</Badge>
-                        </div>
-                    </div>
-
-                    <div className="p-4 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all">
-                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                <Database className="h-4 sm:h-5 w-4 sm:w-5" />
-                            </div>
-                            <h3 className="text-base sm:text-lg font-semibold">Databases</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            <Badge className="text-xs">MongoDB</Badge>
-                            <Badge className="text-xs">PostgreSQL</Badge>
-                            <Badge className="text-xs">MySQL</Badge>
-                            <Badge className="text-xs">Firebase</Badge>
-                            <Badge className="text-xs">Redis</Badge>
-                        </div>
-                    </div>
-
-                    <div className="p-4 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all">
-                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                <Paintbrush className="h-4 sm:h-5 w-4 sm:w-5" />
-                            </div>
-                            <h3 className="text-base sm:text-lg font-semibold">UI/Design</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            <Badge className="text-xs">TailwindCSS</Badge>
-                            <Badge className="text-xs">Figma</Badge>
-                            <Badge className="text-xs">Shadcn UI</Badge>
-                            <Badge className="text-xs">Responsive</Badge>
-                            <Badge className="text-xs">Accessibility</Badge>
-                        </div>
-                    </div>
-
-                    <div className="p-4 sm:p-6 rounded-xl border bg-card hover:shadow-md transition-all">
-                        <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                            <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                                <Server className="h-4 sm:h-5 w-4 sm:w-5" />
-                            </div>
-                            <h3 className="text-base sm:text-lg font-semibold">Cloud Services</h3>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                            <Badge className="text-xs">AWS</Badge>
-                            <Badge className="text-xs">Vercel</Badge>
-                            <Badge className="text-xs">Netlify</Badge>
-                            <Badge className="text-xs">GitHub Actions</Badge>
-                            <Badge className="text-xs">CircleCI</Badge>
-                        </div>
-                    </div>
+                    <SkillCategory
+                        title="Deployment & Cloud"
+                        icon={<Cloud className="h-5 w-5" />}
+                        skills={deploymentSkills}
+                    />
+                    <SkillCategory
+                        title="Databases"
+                        icon={<Database className="h-5 w-5" />}
+                        skills={databaseSkills}
+                    />
+                    <SkillCategory
+                        title="Monitoring & Security"
+                        icon={<Wrench className="h-5 w-5" />}
+                        skills={monitoringSkills}
+                    />
                 </div>
             </div>
         </section>
