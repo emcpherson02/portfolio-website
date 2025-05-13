@@ -1,71 +1,41 @@
 'use client'
 
 import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-interface SkillProgressProps {
-    name: string;
-    value: number;
-    colorClass?: string;
+interface SkillListProps {
+    skills: string[];
     className?: string;
     delay?: number;
 }
 
-export function SkillProgress({
-                                  name,
-                                  value,
-                                  colorClass = "bg-primary",
-                                  className,
-                                  delay = 0
-                              }: SkillProgressProps) {
+export function SkillList({
+                              skills,
+                              className,
+                              delay = 0
+                          }: SkillListProps) {
     return (
-        <div className={cn("space-y-2", className)}>
-            <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">{name}</span>
-                <span className="text-xs text-muted-foreground">{value}%</span>
-            </div>
-            <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+        <div className={cn("flex flex-wrap gap-2", className)}>
+            {skills.map((skill, index) => (
                 <motion.div
-                    className={cn("h-full rounded-full", colorClass)}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${value}%` }}
+                    key={skill}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{
-                        duration: 1,
-                        delay: delay,
-                        ease: "easeOut"
+                        duration: 0.4,
+                        delay: delay + (index * 0.05),
+                        ease: [0.25, 0.1, 0.25, 1.0]
                     }}
-                />
-            </div>
+                >
+                    <Badge
+                        variant="secondary"
+                        className="text-sm"
+                    >
+                        {skill}
+                    </Badge>
+                </motion.div>
+            ))}
         </div>
-    );
-}
-
-interface SkillGroupProps {
-    title: string;
-    skills: { name: string; value: number }[];
-    className?: string;
-    delay?: number;
-}
-
-export function SkillGroup({ title, skills, className, delay = 0 }: SkillGroupProps) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay }}
-            className={cn("space-y-4", className)}
-        >
-            <h3 className="text-lg font-semibold">{title}</h3>
-            <div className="space-y-3">
-                {skills.map((skill, index) => (
-                    <SkillProgress
-                        key={skill.name}
-                        name={skill.name}
-                        value={skill.value}
-                        delay={delay + 0.1 + (index * 0.1)}
-                    />
-                ))}
-            </div>
-        </motion.div>
     );
 }

@@ -7,7 +7,7 @@ import { Download, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { InteractiveTimeline } from "@/components/resume/InteractiveTimeline";
-import { SkillProgress } from "@/components/resume/SkillProgress";
+import { SkillList } from "@/components/resume/SkillProgress";
 import { PrintableResume } from "@/components/resume/PrintableResume";
 import { ResumeLoading } from "@/components/resume/ResumeLoading";
 import { CVTitle } from "@/components/resume/CVTitle";
@@ -92,20 +92,17 @@ const events = [
     }
 ];
 
-// Skills data with categories and proficiency levels
-const skills = [
-    { name: 'Frontend Development', level: 85, category: 'Technical' },
-    { name: 'Backend Development', level: 90, category: 'Technical' },
-    { name: 'Cloud Infrastructure', level: 80, category: 'Technical' },
-    { name: 'DevOps & CI/CD', level: 75, category: 'Technical' },
-    { name: 'Database Systems', level: 70, category: 'Technical' },
-    { name: 'Security Practices', level: 65, category: 'Technical' },
-    { name: 'Java', level: 90, category: 'Languages' },
-    { name: 'JavaScript/TypeScript', level: 85, category: 'Languages' },
-    { name: 'Python', level: 75, category: 'Languages' },
-    { name: 'C++', level: 65, category: 'Languages' },
-    { name: 'AWS', level: 80, category: 'Cloud' },
-    { name: 'GCP', level: 70, category: 'Cloud' }
+const technicalSkills = [
+    'Java', 'Python', 'JavaScript/TypeScript', 'React', 'Node.js',
+    'Spring Boot', 'AWS', 'GCP', 'Kubernetes', 'Docker',
+    'CI/CD', 'RESTful APIs', 'MongoDB', 'PostgreSQL',
+    'Git', 'Terraform', 'Spinnaker', 'Microservices'
+];
+
+const softSkills = [
+    'Problem Solving', 'Team Collaboration', 'Communication',
+    'Agile/Scrum', 'Technical Documentation', 'Project Management',
+    'Pair Programming', 'Presentation Skills', 'Fast Learner'
 ];
 
 export default function ResumePage() {
@@ -125,15 +122,6 @@ export default function ResumePage() {
 
         return () => clearTimeout(timer);
     }, []);
-
-    // Group skills by category for display
-    const skillsByCategory = skills.reduce<Record<string, typeof skills>>((acc, skill) => {
-        if (!acc[skill.category]) {
-            acc[skill.category] = [];
-        }
-        acc[skill.category].push(skill);
-        return acc;
-    }, {});
 
     return (
         <div className="bg-background">
@@ -222,28 +210,35 @@ export default function ResumePage() {
                         )}
 
                         {/* Skills Section with Progress Bars */}
-                        {resumeReady && Object.entries(skillsByCategory).map(([category, categorySkills], index) => (
+                        {resumeReady && (
                             <motion.div
-                                key={category}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.5, delay: 0.3 + (index * 0.1) }}
+                                transition={{ duration: 0.5, delay: 0.3 }}
                                 className="bg-card rounded-xl p-6 border shadow-sm"
                             >
-                                <h2 className="text-xl font-bold border-b pb-2 mb-4">{category} Skills</h2>
-
-                                <div className="space-y-4 mt-4">
-                                    {categorySkills.map((skill, skillIndex) => (
-                                        <SkillProgress
-                                            key={skill.name}
-                                            name={skill.name}
-                                            value={skill.level}
-                                            delay={0.1 + (skillIndex * 0.1)}
-                                        />
-                                    ))}
-                                </div>
+                                <h2 className="text-xl font-bold border-b pb-2 mb-4">Technical Skills</h2>
+                                <SkillList
+                                    skills={technicalSkills}
+                                    delay={0.1}
+                                />
                             </motion.div>
-                        ))}
+                        )}
+
+                        {resumeReady && (
+                            <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                                className="bg-card rounded-xl p-6 border shadow-sm"
+                            >
+                                <h2 className="text-xl font-bold border-b pb-2 mb-4">Soft Skills</h2>
+                                <SkillList
+                                    skills={softSkills}
+                                    delay={0.1}
+                                />
+                            </motion.div>
+                        )}
                     </div>
 
                     {/* Right Column - Interactive Timeline */}
