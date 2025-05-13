@@ -14,7 +14,7 @@ import { useRef } from "react";
 interface ProjectCardProps {
     title: string;
     description: string;
-    imageSrc: StaticImageData;
+    imageSrc: string | StaticImageData;
     tags: string[];
     liveUrl?: string;
     githubUrl?: string;
