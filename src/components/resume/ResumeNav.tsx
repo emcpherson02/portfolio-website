@@ -1,9 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { ArrowLeft, Home } from "lucide-react";
+import {  Home } from "lucide-react";
 
 export function ResumeNav() {
     return (

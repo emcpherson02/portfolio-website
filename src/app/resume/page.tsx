@@ -48,7 +48,7 @@ const events = [
         id: 'project-studentwallet',
         title: 'StudentWallet – FinTech Web Application',
         organization: 'React, Node.js, Firebase, Plaid API, GCP',
-        date: '2024',
+        date: '2025',
         category: 'project',
         description: [
             'Built a full-stack budgeting platform with secure bank connectivity via Plaid.',
@@ -60,7 +60,7 @@ const events = [
         id: 'project-microservices',
         title: 'Cloud Computing Microservices',
         organization: 'Python, Go, Java, Swift, Node.js, Ruby, Kubernetes, Nginx',
-        date: '2023',
+        date: '2025',
         category: 'project',
         description: [
             'Designed and deployed containerized services in multiple languages.',
@@ -69,15 +69,14 @@ const events = [
         ]
     },
     {
-        id: 'project-studybuddy',
-        title: 'Study Buddy – Student Matching Platform',
-        organization: 'React (TS), Java (Spring Boot), MongoDB',
-        date: '2024-Present',
+        id: 'weekender-ireland',
+        title: 'WeekenderIreland - Internal Tourism App',
+        organization: 'Flutter, Java (Spring Boot), Firestore, Google Maps SDK',
+        date: 'Present',
         category: 'project',
         description: [
-            'Matchmaking system to pair students by learning style and schedule.',
-            'Implementing backend services using Spring Boot and MongoDB with REST API-based logic.',
-            'Designed to address social and academic integration challenges faced by neurodivergent and international students.'
+            'A gamified internal tourism app for Ireland, displaying a map with activities to explore. ' +
+            'Users earn points for completing activities and can compare scores with friends.'
         ]
     },
     {
@@ -109,7 +108,6 @@ export default function ResumePage() {
     const [showLoading, setShowLoading] = useState(true);
     const [resumeReady, setResumeReady] = useState(false);
 
-    // Add id to body to allow scrolling to top
     useEffect(() => {
         document.body.id = 'resume';
     }, []);

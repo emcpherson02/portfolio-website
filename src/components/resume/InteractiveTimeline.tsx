@@ -1,4 +1,3 @@
-// src/components/resume/InteractiveTimeline.tsx
 'use client'
 
 import { motion } from "framer-motion";
@@ -24,19 +23,35 @@ interface InteractiveTimelineProps {
 export function InteractiveTimeline({ events, className }: InteractiveTimelineProps) {
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
 
-    // Group events by year
+
+    // Group events by year but handle "Present" specially
     const eventsByYear = events.reduce<Record<string, TimelineEvent[]>>((acc, event) => {
-        // Extract year from date
-        const year = event.date.split(' ').pop() || '';
-        if (!acc[year]) {
-            acc[year] = [];
+        // Extract year from date, handling "Present" case
+        let yearKey = "Present";
+
+        if (event.date.includes("Present")) {
+            yearKey = "Present";
+        } else {
+            // Extract the last year mentioned in the date string
+            const yearMatch = event.date.match(/\d{4}(?!.*\d{4})/);
+            if (yearMatch) {
+                yearKey = yearMatch[0];
+            }
         }
-        acc[year].push(event);
+
+        if (!acc[yearKey]) {
+            acc[yearKey] = [];
+        }
+        acc[yearKey].push(event);
         return acc;
     }, {});
 
-    // Sort years in descending order
-    const sortedYears = Object.keys(eventsByYear).sort((a, b) => Number(b) - Number(a));
+    // Sort years in descending order, with "Present" at the top
+    const sortedYears = Object.keys(eventsByYear).sort((a, b) => {
+        if (a === "Present") return -1;
+        if (b === "Present") return 1;
+        return parseInt(b) - parseInt(a);
+    });
 
     const getIconForCategory = (category: string, isActive: boolean = false) => {
         const iconClass = cn("h-4 w-4", isActive ? "text-primary" : "text-muted-foreground");
@@ -56,11 +71,11 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
     return (
         <div className={cn("relative", className)}>
             {/* Main Timeline */}
-            <div className="border-l-2 border-muted ml-3 pl-8 space-y-8">
+            <div className="border-l-2 border-muted ml-6 pl-8 space-y-8">
                 {sortedYears.map((year) => (
                     <div key={year} className="relative">
                         {/* Year label */}
-                        <div className="absolute -left-11 bg-muted rounded-full px-2 py-1 text-xs font-semibold">
+                        <div className="absolute -left-14 -top-1 bg-muted rounded-full px-3 py-1 text-xs font-semibold">
                             {year}
                         </div>
 
@@ -81,15 +96,15 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
                                         whileHover={{ x: 2 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        {/* Icon circle - fixed positioning */}
-                                        <div className="absolute -left-12 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-background border border-muted flex items-center justify-center">
+                                        {/* Icon circle - adjusted positioning */}
+                                        <div className="absolute -left-12 top-5 h-6 w-6 rounded-full bg-background border border-muted flex items-center justify-center">
                                             {event.icon || getIconForCategory(event.category, isActive)}
                                         </div>
 
                                         {/* Title and date row */}
-                                        <div className="flex flex-wrap md:flex-nowrap justify-between gap-2 mb-1">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-1 mb-2">
                                             <h3 className={cn(
-                                                "font-medium",
+                                                "font-medium text-base md:text-lg",
                                                 isActive ? "text-primary" : ""
                                             )}>
                                                 {event.title}
@@ -100,7 +115,7 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
                                         </div>
 
                                         {/* Organization */}
-                                        <p className="text-sm text-muted-foreground">{event.organization}</p>
+                                        <p className="text-sm text-muted-foreground mb-1">{event.organization}</p>
 
                                         {/* Expanded content */}
                                         {isActive && (
