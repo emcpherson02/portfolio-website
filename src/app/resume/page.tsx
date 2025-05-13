@@ -13,14 +13,15 @@ import { ResumeLoading } from "@/components/resume/ResumeLoading";
 import { CVTitle } from "@/components/resume/CVTitle";
 import { ResumeNav } from "@/components/resume/ResumeNav";
 import { ScrollButton } from "@/components/resume/ScrollButton";
+import { type TimelineEvent } from "@/components/resume/InteractiveTimeline";
 
-const events = [
+const events: TimelineEvent[] = [
     {
         id: 'job-rapid7',
         title: 'Software Engineering Intern',
         organization: 'Rapid7, Belfast',
         date: 'Jun 2023 – Jun 2024',
-        category: 'work',
+        category: 'work' as const,
         description: [
             'Deployed a SaaS platform into production using Kubernetes and Spinnaker, contributing to customer-facing delivery.',
             'Provided critical maintenance and bug resolution for an enterprise Java Spring Boot SaaS application.',
@@ -38,7 +39,7 @@ const events = [
         title: 'BEng Software Engineering',
         organization: 'Queen\'s University Belfast',
         date: 'Sep 2021 – Jun 2025',
-        category: 'education',
+        category: 'education' as const,
         description: [
             'Predicted: 2:1',
             'Key Modules: Cloud Computing (81%), Professional Skills (82%), Artificial Intelligence (67%)'
@@ -49,7 +50,7 @@ const events = [
         title: 'StudentWallet – FinTech Web Application',
         organization: 'React, Node.js, Firebase, Plaid API, GCP',
         date: '2025',
-        category: 'project',
+        category: 'project' as const,
         description: [
             'Built a full-stack budgeting platform with secure bank connectivity via Plaid.',
             'Deployed on Google Cloud Run with intelligent autoscaling and load balancing.',
@@ -61,7 +62,7 @@ const events = [
         title: 'Cloud Computing Microservices',
         organization: 'Python, Go, Java, Swift, Node.js, Ruby, Kubernetes, Nginx',
         date: '2025',
-        category: 'project',
+        category: 'project' as const,
         description: [
             'Designed and deployed containerized services in multiple languages.',
             'Implemented Nginx reverse proxy for performance and load balancing.',
@@ -73,7 +74,7 @@ const events = [
         title: 'WeekenderIreland - Internal Tourism App',
         organization: 'Flutter, Java (Spring Boot), Firestore, Google Maps SDK',
         date: 'Present',
-        category: 'project',
+        category: 'project' as const,
         description: [
             'A gamified internal tourism app for Ireland, displaying a map with activities to explore. ' +
             'Users earn points for completing activities and can compare scores with friends.'
@@ -84,7 +85,7 @@ const events = [
         title: 'A-Levels',
         organization: 'Ballymena Academy',
         date: '2021',
-        category: 'education',
+        category: 'education' as const,
         description: [
             'Engineering (A*), Physics (C), Media (B)'
         ]
@@ -198,7 +199,7 @@ export default function ResumePage() {
                                 <div className="space-y-4">
                                     <h2 className="text-xl font-bold border-b pb-2">Professional Summary</h2>
                                     <p className="text-muted-foreground">
-                                        Final-year Software Engineering student at Queen's University Belfast with hands-on experience at Rapid7. Strong background in backend Java development, secure cloud infrastructure, and technical expertise in low-level fault analysis for on-premises applications.
+                                        Final-year Software Engineering student at Queen&#39;s University Belfast with hands-on experience at Rapid7. Strong background in backend Java development, secure cloud infrastructure, and technical expertise in low-level fault analysis for on-premises applications.
                                     </p>
                                     <p className="text-muted-foreground">
                                         Successfully deployed production-grade SaaS applications using Kubernetes and Spinnaker. Known for improving system performance, reducing AWS costs, and implementing security-first processes.
@@ -270,7 +271,7 @@ export default function ResumePage() {
                     >
                         <h2 className="text-2xl font-bold mb-4">Looking for a Skilled Developer?</h2>
                         <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-                            I'm currently open to new opportunities in software development. If you're looking for a passionate developer with hands-on experience, let's connect!
+                            I&#39;m currently open to new opportunities in software development. If you&#39;re looking for a passionate developer with hands-on experience, let&#39;s connect!
                         </p>
                         <div className="flex flex-wrap justify-center gap-4">
                             <Button asChild size="lg" className="shadow-md">

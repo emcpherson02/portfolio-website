@@ -5,7 +5,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Calendar, Building, GraduationCap, Code } from "lucide-react";
 
-interface TimelineEvent {
+export interface TimelineEvent {
     id: string;
     title: string;
     organization: string;
@@ -15,14 +15,13 @@ interface TimelineEvent {
     icon?: React.ReactNode;
 }
 
-interface InteractiveTimelineProps {
+export interface InteractiveTimelineProps {
     events: TimelineEvent[];
     className?: string;
 }
 
 export function InteractiveTimeline({ events, className }: InteractiveTimelineProps) {
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
-
 
     // Group events by year but handle "Present" specially
     const eventsByYear = events.reduce<Record<string, TimelineEvent[]>>((acc, event) => {

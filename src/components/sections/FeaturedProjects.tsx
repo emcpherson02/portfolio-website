@@ -1,7 +1,7 @@
 
 'use client'
 
-import Image from "next/image";
+import Image, {StaticImageData} from "next/image";
 import Link from "next/link";
 import studentWalletImage from "../../../public/projects/StudentWallet-ui.jpg"
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ import { useRef } from "react";
 interface ProjectCardProps {
     title: string;
     description: string;
-    imageSrc: string;
+    imageSrc: StaticImageData;
     tags: string[];
     liveUrl?: string;
     githubUrl?: string;
