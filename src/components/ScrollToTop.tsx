@@ -4,12 +4,9 @@ import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 
 export function ScrollToTop() {
     const [isVisible, setIsVisible] = useState(false);
-    const { scrollTo } = useSmoothScroll();
-
     useEffect(() => {
         // Show button when page is scrolled down
         const toggleVisibility = () => {
