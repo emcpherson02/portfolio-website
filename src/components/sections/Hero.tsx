@@ -30,7 +30,7 @@ export function Hero() {
                                 Hi, I&#39;m <span className="text-primary"> Elliott McPherson</span>
                             </h1>
                             <h2 className="text-xl md:text-2xl text-muted-foreground">
-                                Full-Stack Developer specialising in modern web technologies
+                                Full-Stack Developer
                             </h2>
                         </div>
 
