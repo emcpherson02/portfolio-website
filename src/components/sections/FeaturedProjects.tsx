@@ -3,7 +3,6 @@
 
 import Image, {StaticImageData} from "next/image";
 import Link from "next/link";
-import studentWalletImage from "../../../public/projects/StudentWallet-ui.jpg"
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -149,7 +148,7 @@ export function FeaturedProjects() {
         {
             title: "StudentWallet",
             description: "StudentWallet is a comprehensive financial management system designed specifically for university students. It allows students to track their spending, manage budgets, monitor their maintenance loan, and integrate their bank accounts via Plaid.",
-            imageSrc: studentWalletImage,
+            imageSrc: "../../../public/projects/StudentWallet-ui.jpg",
             tags: ["React.js", "Express.js", "CSS/HTML", "Node.js", "Docker", "GCP", "Firestore", "Plaid API"],
             liveUrl: "https://studentwallet-4e2ca.web.app",
             githubUrl: "https://github.com/emcpherson02/StudentWallet",
