@@ -27,7 +27,7 @@ export function Hero() {
                     >
                         <div className="space-y-3">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                                Hi, I'm <span className="text-primary"> Elliott McPherson</span>
+                                Hi, I&#39;m <span className="text-primary"> Elliott McPherson</span>
                             </h1>
                             <h2 className="text-xl md:text-2xl text-muted-foreground">
                                 Full-Stack Developer specialising in modern web technologies
