@@ -157,7 +157,7 @@ export function Navbar({ className }: NavbarProps) {
                     transition={{ duration: 0.5, delay: 0.1 }}
                     className="hidden md:flex items-center gap-6 lg:gap-8"
                 >
-                    {['Home', 'Projects', 'Skills', 'Resume', 'Blog', 'Contact'].map((item, index) => {
+                    {['Home', 'Projects', 'Skills', 'Resume', 'Blog', 'Contact'].map((item) => {
                         const href = item === 'Home' ? '/' :
                             (item === 'Resume' || item === 'Blog') ? `/${item.toLowerCase()}` :
                                 `/#${item.toLowerCase()}`;
