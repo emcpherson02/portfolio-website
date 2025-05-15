@@ -1,22 +1,21 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Mail, MapPin, Clock, Calendar } from "lucide-react";
+import { Mail, MapPin, Clock, Calendar, Linkedin, Github, FileText } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 
 export function Contact() {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
-    const formRef = useRef(null);
-    const formInView = useInView(formRef, { once: true, amount: 0.3 });
+    const contactInfoRef = useRef(null);
+    const contactInfoInView = useInView(contactInfoRef, { once: true, amount: 0.3 });
 
-    const infoRef = useRef(null);
-    const infoInView = useInView(infoRef, { once: true, amount: 0.3 });
+    const socialLinksRef = useRef(null);
+    const socialLinksInView = useInView(socialLinksRef, { once: true, amount: 0.3 });
 
     return (
         <section className="w-full py-16 sm:py-20 bg-background" id="contact">
@@ -36,167 +35,164 @@ export function Contact() {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
-                    {/* Contact Form */}
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+                    {/* Contact Information */}
                     <motion.div
-                        ref={formRef}
+                        ref={contactInfoRef}
                         initial={{ opacity: 0, x: -30 }}
-                        animate={formInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+                        animate={contactInfoInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all"
+                        className="lg:col-span-2 rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all"
                     >
-                        <form className="space-y-5 sm:space-y-6">
-                            <div className="grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.2 }}
-                                    className="space-y-2"
-                                >
-                                    <label htmlFor="name" className="text-sm font-medium">
-                                        Name
-                                    </label>
-                                    <Input id="name" placeholder="Your name" />
-                                </motion.div>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.3 }}
-                                    className="space-y-2"
-                                >
-                                    <label htmlFor="email" className="text-sm font-medium">
-                                        Email
-                                    </label>
-                                    <Input id="email" type="email" placeholder="Your email" />
-                                </motion.div>
-                            </div>
+                        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Contact Information</h3>
+
+                        <div className="space-y-5 sm:space-y-6">
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
-                                animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                animate={contactInfoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                transition={{ duration: 0.4, delay: 0.3 }}
+                                className="flex items-start gap-4"
+                            >
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                    <MapPin className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-medium">Location</h4>
+                                    <p className="text-muted-foreground">Belfast, United Kingdom</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={contactInfoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                                 transition={{ duration: 0.4, delay: 0.4 }}
-                                className="space-y-2"
+                                className="flex items-start gap-4"
                             >
-                                <label htmlFor="subject" className="text-sm font-medium">
-                                    Subject
-                                </label>
-                                <Input id="subject" placeholder="How can I help you?" />
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                    <Mail className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-medium">Email</h4>
+                                    <a
+                                        href="mailto:elliott.mcpherson985@gmail.com"
+                                        className="text-muted-foreground hover:text-primary transition-colors"
+                                    >
+                                        elliott.mcpherson985@gmail.com
+                                    </a>
+                                </div>
                             </motion.div>
+
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
-                                animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                animate={contactInfoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                                 transition={{ duration: 0.4, delay: 0.5 }}
-                                className="space-y-2"
+                                className="flex items-start gap-4"
                             >
-                                <label htmlFor="message" className="text-sm font-medium">
-                                    Message
-                                </label>
-                                <Textarea
-                                    id="message"
-                                    placeholder="Your message"
-                                    rows={5}
-                                />
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                    <Clock className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-medium">Response Time</h4>
+                                    <p className="text-muted-foreground">Usually within 24 hours</p>
+                                </div>
                             </motion.div>
+
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
-                                animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                animate={contactInfoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                                 transition={{ duration: 0.4, delay: 0.6 }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                className="flex items-start gap-4"
                             >
-                                <Button type="submit" className="w-full shadow-sm">
-                                    Send Message
-                                </Button>
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                                    <Calendar className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h4 className="font-medium">Work Status</h4>
+                                    <p className="text-muted-foreground">Open to full-time opportunities and freelance projects</p>
+                                </div>
                             </motion.div>
-                        </form>
+                        </div>
                     </motion.div>
 
-                    {/* Contact Info */}
-                    <div className="space-y-6" ref={infoRef}>
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={infoInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all"
-                        >
-                            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Contact Information</h3>
-                            <div className="space-y-5 sm:space-y-6">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.3 }}
-                                    className="flex items-start gap-4"
-                                >
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                        <MapPin className="h-5 w-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium">Location</h4>
-                                        <p className="text-muted-foreground">Belfast, United Kingdom</p>
-                                    </div>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.4 }}
-                                    className="flex items-start gap-4"
-                                >
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                        <Mail className="h-5 w-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium">Email</h4>
+                    {/* Social Links & CV */}
+                    <motion.div
+                        ref={socialLinksRef}
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={socialLinksInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="lg:col-span-3 rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all"
+                    >
+                        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Connect With Me</h3>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {/* LinkedIn */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={socialLinksInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                transition={{ duration: 0.4, delay: 0.3 }}
+                                whileHover={{ y: -5 }}
+                                className="rounded-xl border p-6 flex flex-col items-center text-center hover:shadow-md transition-all"
+                            >
+                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
+                                    <Linkedin className="h-7 w-7 text-foreground" />
+                                </div>
+                                <h4 className="font-medium text-lg mb-2">LinkedIn</h4>
+                                <p className="text-muted-foreground text-sm mb-4">Connect with me professionally</p>
+                                <Button asChild variant="default" className="mt-auto w-full shadow-sm">
+                                    <Link href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer">
+                                        View Profile
+                                    </Link>
+                                </Button>
+                            </motion.div>
+
+                            {/* GitHub */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={socialLinksInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                transition={{ duration: 0.4, delay: 0.4 }}
+                                whileHover={{ y: -5 }}
+                                className="rounded-xl border p-6 flex flex-col items-center text-center hover:shadow-md transition-all"
+                            >
+                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
+                                    <Github className="h-7 w-7 text-foreground" />
+                                </div>
+                                <h4 className="font-medium text-lg mb-2">GitHub</h4>
+                                <p className="text-muted-foreground text-sm mb-4">Check out my projects and code</p>
+                                <Button asChild variant="outline" className="mt-auto w-full shadow-sm">
+                                    <Link href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer">
+                                        View Repositories
+                                    </Link>
+                                </Button>
+                            </motion.div>
+
+                            {/* CV/Resume */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={socialLinksInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                                transition={{ duration: 0.4, delay: 0.5 }}
+                                whileHover={{ y: -5 }}
+                                className="rounded-xl border p-6 flex flex-col items-center text-center hover:shadow-md transition-all sm:col-span-2"
+                            >
+                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
+                                    <FileText className="h-7 w-7 text-foreground" />
+                                </div>
+                                <h4 className="font-medium text-lg mb-2">Curriculum Vitae</h4>
+                                <p className="text-muted-foreground text-sm mb-4">Download my CV for a detailed overview of my experience and skills</p>
+                                <div className="flex gap-4 mt-auto w-full">
+                                    <Button asChild variant="default" className="w-full shadow-sm">
                                         <a
-                                            href="mailto:elliott.mcpherson985@gmail.com"
-                                            className="text-muted-foreground hover:text-primary transition-colors"
+                                            href="/CV_Elliott_McPherson.pdf"
+                                            download="Elliott_McPherson_CV.pdf"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                         >
-                                            elliott.mcpherson985@gmail.com
+                                            Download CV
                                         </a>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={infoInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            className="rounded-xl border bg-card p-6 sm:p-8 shadow-sm hover:shadow-md transition-all"
-                        >
-                            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Availability</h3>
-
-                            <div className="space-y-5 sm:space-y-6">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.5 }}
-                                    className="flex items-start gap-4"
-                                >
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                        <Clock className="h-5 w-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium">Response Time</h4>
-                                        <p className="text-muted-foreground">Usually within 24 hours</p>
-                                    </div>
-                                </motion.div>
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-                                    transition={{ duration: 0.4, delay: 0.6 }}
-                                    className="flex items-start gap-4"
-                                >
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                        <Calendar className="h-5 w-5" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-medium">Work Status</h4>
-                                        <p className="text-muted-foreground">Open to full-time opportunities and freelance projects</p>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-                    </div>
+                                    </Button>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
         </section>

@@ -132,7 +132,9 @@ export function Skills() {
         { name: "EC2" },
         { name: "SQS" },
         { name: "SNS" },
-        { name: "S3" }
+        { name: "S3" },
+        { name: "Amplify" },
+        { name: "CloudFront" }
     ];
 
     const databaseSkills = [

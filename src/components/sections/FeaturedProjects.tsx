@@ -1,19 +1,19 @@
-
 'use client'
 
-import Image, {StaticImageData} from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import {awsConfig} from "@/config/aws-config";
 
 interface ProjectCardProps {
     title: string;
     description: string;
-    imageSrc: string | StaticImageData;
+    imageSrc: string;
     tags: string[];
     liveUrl?: string;
     githubUrl?: string;
@@ -33,6 +33,7 @@ function ProjectCard({
                      }: ProjectCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(cardRef, { once: true, amount: 0.3 });
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     // Calculate staggered animation delay based on index
     const baseDelay = 0.2;
@@ -58,21 +59,27 @@ function ProjectCard({
                     "relative w-full lg:w-1/2 h-[200px] sm:h-[240px] lg:h-auto overflow-hidden bg-muted/50",
                     reverse ? "lg:order-last" : ""
                 )}>
-                    {imageSrc ? (
-                        <div className="relative w-full h-full">
-                            <Image
-                                src={imageSrc}
-                                alt={title}
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
-                        </div>
-                    ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/80 to-muted">
-                            <div className="text-muted-foreground">Project Preview</div>
+                    {/* Loading indicator */}
+                    {!imageLoaded && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-muted/80">
+                            <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
                         </div>
                     )}
+
+                    <div className="relative w-full h-full">
+                        <Image
+                            src={imageSrc}
+                            alt={title}
+                            className={`object-cover transition-transform duration-700 group-hover:scale-105 ${
+                                imageLoaded ? 'opacity-100' : 'opacity-0'
+                            } transition-opacity duration-300`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            onLoad={() => setImageLoaded(true)}
+                            priority={index === 0}
+                            loading={index === 0 ? "eager" : "lazy"}
+                        />
+                    </div>
 
                     {/* Overlay effect that appears on hover */}
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -148,16 +155,16 @@ export function FeaturedProjects() {
         {
             title: "StudentWallet",
             description: "StudentWallet is a comprehensive financial management system designed specifically for university students. It allows students to track their spending, manage budgets, monitor their maintenance loan, and integrate their bank accounts via Plaid.",
-            imageSrc: "/public/projects/StudentWallet-ui.jpg",
-            tags: ["React.js", "Express.js", "CSS/HTML", "Node.js", "Docker", "GCP", "Firestore", "Plaid API"],
+            imageSrc: `${awsConfig.imageBaseUrl}/projects/StudentWallet-ui.jpg`,
+            tags: ["React.js", "Express.js", "CSS/HTML", "Node.js", "docker-compose", "GCP CloudRun", "Firestore", "Plaid API"],
             liveUrl: "https://studentwallet-4e2ca.web.app",
             githubUrl: "https://github.com/emcpherson02/StudentWallet",
         },
         {
             title: "Portfolio Website",
             description: "A portfolio website built to improve my TypeScript and frontend development skills, designed to highlight my projects and demonstrate my employability.",
-            imageSrc: "",
-            tags: ["React", "TypeScript", "Next.js", "Shadcn-UI", "TailwindCSS"],
+            imageSrc: `${awsConfig.imageBaseUrl}/projects/portfolio-website-ui.png`,
+            tags: ["React", "TypeScript", "Next.js", "Shadcn-UI", "TailwindCSS", "AWS Amplify", "AWS CloudFront", "AWS S3"],
             liveUrl: "",
             githubUrl: "https://github.com/emcpherson02/portfolio-website",
             reverse: true,
@@ -201,23 +208,6 @@ export function FeaturedProjects() {
                         />
                     ))}
                 </div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="flex justify-center mt-10 sm:mt-16"
-                >
-                    <Button
-                        asChild
-                        size="lg"
-                        className="shadow-md transition-all hover:shadow-lg hover:scale-105"
-                    >
-                        <Link href="/projects">
-                            View All Projects <ArrowUpRight className="ml-2 h-4 w-4" />
-                        </Link>
-                    </Button>
-                </motion.div>
             </div>
         </section>
     );

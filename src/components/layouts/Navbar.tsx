@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
     className?: string;
@@ -132,192 +131,151 @@ export function Navbar({ className }: NavbarProps) {
             )}
         >
             <div className="container flex h-16 items-center justify-between">
-                {/* Logo - Name Only */}
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="flex items-center"
-                >
-                    <Link href="/" className="font-bold text-xl group">
+                {/* Logo */}
+                <div className="flex items-center">
+                    <Link href="/" className="font-bold text-xl flex items-center gap-2">
                         <span className={cn(
-                            "transition-all duration-300 relative",
+                            "transition-opacity duration-300",
                             scrolled || !isMobile ? "opacity-100" : "opacity-0 md:opacity-100"
                         )}>
-                            <span className="relative z-10">Elliott McPherson</span>
-                            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
+                            Elliott McPherson
                         </span>
                     </Link>
-                </motion.div>
+                </div>
 
                 {/* Desktop Navigation */}
-                <motion.nav
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="hidden md:flex items-center gap-6 lg:gap-8"
-                >
-                    {['Home', 'Projects', 'Skills', 'Resume', 'Blog', 'Contact'].map((item) => {
-                        const href = item === 'Home' ? '/' :
-                            (item === 'Resume' || item === 'Blog') ? `/${item.toLowerCase()}` :
-                                `/#${item.toLowerCase()}`;
-                        const isActive = pathname === href ||
-                            (pathname === '/' && activeSection === item.toLowerCase()) ||
-                            (href === '/' && pathname === '/' && activeSection === 'home');
-
-                        return (
-                            <Link
-                                key={item}
-                                href={href}
-                                className={cn(
-                                    "text-sm font-medium transition-all duration-300 hover:text-primary relative py-1.5 px-1",
-                                    isActive ? "text-primary" : ""
-                                )}
-                                onClick={href.includes('#') ? (e) => handleNavClick(e, `#${item.toLowerCase()}`) : undefined}
-                            >
-                                {item}
-                                <span className={cn(
-                                    "absolute bottom-0 left-0 h-0.5 bg-primary rounded-full transition-all duration-300",
-                                    isActive ? "w-full" : "w-0"
-                                )}></span>
-                            </Link>
-                        );
-                    })}
-                </motion.nav>
-
-                {/* CTA Button */}
-                <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="hidden md:flex"
-                >
-                    <Button
-                        variant="default"
-                        className="shadow-sm rounded-md relative overflow-hidden group"
-                        onClick={() => {
-                            if (pathname === '/') {
-                                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                            } else {
-                                window.location.href = '/#contact';
-                            }
-                        }}
+                <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+                    <Link
+                        href="/"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            pathname === '/' && activeSection === 'home' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
                     >
-                        <span className="relative z-10">Hire Me</span>
-                        <span className="absolute inset-0 bg-primary/90 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                    </Button>
-                </motion.div>
+                        Home
+                    </Link>
+                    <Link
+                        href="/#projects"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            pathname === '/' && activeSection === 'projects' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
+                        onClick={(e) => handleNavClick(e, '#projects')}
+                    >
+                        Projects
+                    </Link>
+                    <Link
+                        href="/#skills"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            pathname === '/' && activeSection === 'skills' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
+                        onClick={(e) => handleNavClick(e, '#skills')}
+                    >
+                        Skills
+                    </Link>
+                    <Link
+                        href="/resume"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary",
+                            pathname === '/resume' ? "text-primary" : ""
+                        )}
+                    >
+                        Resume
+                    </Link>
+                    <Link
+                        href="/#contact"
+                        className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                            pathname === '/' && activeSection === 'contact' ? "text-primary after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full" : ""
+                        )}
+                        onClick={(e) => handleNavClick(e, '#contact')}
+                    >
+                        Contact
+                    </Link>
+                </nav>
 
                 {/* Mobile Menu Button */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
+                <Button
+                    variant="ghost"
                     className="md:hidden"
+                    size="icon"
+                    onClick={toggleMenu}
+                    aria-label="Toggle menu"
                 >
-                    <Button
-                        variant="ghost"
-                        className="h-9 w-9 p-0 rounded-full hover:bg-primary/10"
-                        size="icon"
-                        onClick={toggleMenu}
-                        aria-label="Toggle menu"
-                    >
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={isMenuOpen ? 'close' : 'menu'}
-                                initial={{ opacity: 0, rotate: isMenuOpen ? -90 : 90 }}
-                                animate={{ opacity: 1, rotate: 0 }}
-                                exit={{ opacity: 0, rotate: isMenuOpen ? 90 : -90 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                {isMenuOpen ? (
-                                    <X className="h-5 w-5" />
-                                ) : (
-                                    <Menu className="h-5 w-5" />
-                                )}
-                            </motion.div>
-                        </AnimatePresence>
-                        <span className="sr-only">Toggle menu</span>
-                    </Button>
-                </motion.div>
+                    {isMenuOpen ? (
+                        <X className="h-5 w-5" />
+                    ) : (
+                        <Menu className="h-5 w-5" />
+                    )}
+                    <span className="sr-only">Toggle menu</span>
+                </Button>
             </div>
 
             {/* Mobile Navigation */}
-            <AnimatePresence>
-                {isMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="fixed inset-x-0 top-16 z-50 md:hidden overflow-hidden"
-                    >
-                        <motion.div
-                            initial={{ y: -20 }}
-                            animate={{ y: 0 }}
-                            transition={{ duration: 0.3, delay: 0.1 }}
-                            className="bg-background/95 backdrop-blur-md border-b shadow-sm"
-                        >
-                            <div className="container py-5">
-                                <nav className="flex flex-col space-y-1">
-                                    {['Home', 'Projects', 'Skills', 'Resume', 'Blog', 'Contact'].map((item, index) => {
-                                        const href = item === 'Home' ? '/' :
-                                            (item === 'Resume' || item === 'Blog') ? `/${item.toLowerCase()}` :
-                                                `/#${item.toLowerCase()}`;
-                                        const isActive = pathname === href ||
-                                            (pathname === '/' && activeSection === item.toLowerCase()) ||
-                                            (href === '/' && pathname === '/' && activeSection === 'home');
-
-                                        return (
-                                            <motion.div
-                                                key={item}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                transition={{ duration: 0.3, delay: 0.1 + index * 0.05 }}
-                                            >
-                                                <Link
-                                                    href={href}
-                                                    className={cn(
-                                                        "flex items-center gap-2 px-4 py-3 rounded-md transition-all",
-                                                        isActive
-                                                            ? "bg-primary/10 text-primary"
-                                                            : "hover:bg-muted/50 text-foreground"
-                                                    )}
-                                                    onClick={href.includes('#') ? (e) => handleNavClick(e, `#${item.toLowerCase()}`) : () => setIsMenuOpen(false)}
-                                                >
-                                                    <span>{item}</span>
-                                                </Link>
-                                            </motion.div>
-                                        );
-                                    })}
-
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.3, delay: 0.4 }}
-                                        className="pt-2"
-                                    >
-                                        <Button
-                                            variant="default"
-                                            className="w-full shadow-sm"
-                                            onClick={() => {
-                                                setIsMenuOpen(false);
-                                                if (pathname === '/') {
-                                                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                                                } else {
-                                                    window.location.href = '/#contact';
-                                                }
-                                            }}
-                                        >
-                                            Hire Me
-                                        </Button>
-                                    </motion.div>
-                                </nav>
-                            </div>
-                        </motion.div>
-                    </motion.div>
+            <div
+                className={cn(
+                    "fixed inset-x-0 top-16 z-50 md:hidden transform transition-transform duration-300 ease-in-out",
+                    isMenuOpen ? "translate-y-0" : "-translate-y-full"
                 )}
-            </AnimatePresence>
+            >
+                <div className="bg-background/95 backdrop-blur-md border-b shadow-sm">
+                    <div className="container py-5">
+                        <nav className="flex flex-col space-y-4">
+                            <Link
+                                href="/"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/' && activeSection === 'home' ? "text-primary" : ""
+                                )}
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                href="/#projects"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/' && activeSection === 'projects' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#projects')}
+                            >
+                                Projects
+                            </Link>
+                            <Link
+                                href="/#skills"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/' && activeSection === 'skills' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#skills')}
+                            >
+                                Skills
+                            </Link>
+                            <Link
+                                href="/resume"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/resume' ? "text-primary" : ""
+                                )}
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Resume
+                            </Link>
+                            <Link
+                                href="/#contact"
+                                className={cn(
+                                    "text-sm font-medium transition-colors hover:text-primary py-2",
+                                    pathname === '/' && activeSection === 'contact' ? "text-primary" : ""
+                                )}
+                                onClick={(e) => handleNavClick(e, '#contact')}
+                            >
+                                Contact
+                            </Link>
+                        </nav>
+                    </div>
+                </div>
+            </div>
         </header>
     );
 }
