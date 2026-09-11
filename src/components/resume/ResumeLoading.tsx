@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from "motion/react";
-import { File, CheckCircle } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { File } from "lucide-react";
 import { ProgressBar } from "@/components/resume/ProgressBar";
 import { useState, useEffect } from "react";
 
@@ -9,96 +9,65 @@ interface ResumeLoadingProps {
     onComplete: () => void;
 }
 
+const DURATION_MS = 1200;
+
 export function ResumeLoading({ onComplete }: ResumeLoadingProps) {
     const [progress, setProgress] = useState(0);
+    const reducedMotion = useReducedMotion();
 
-    // Animate progress from 0 to 100 over time
     useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress(prevProgress => {
-                // Accelerate towards the end
-                const step = prevProgress < 70 ? 2 : (prevProgress < 90 ? 1 : 0.5);
-                const newProgress = prevProgress + step;
+        if (reducedMotion) {
+            onComplete();
+            return;
+        }
 
-                if (newProgress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        onComplete();
-                    }, 500);
-                    return 100;
-                }
+        // Driven by elapsed wall-clock time rather than counting ticks. A tick
+        // counter stretches to minutes in a background tab, where timers are
+        // clamped to >=1s - which is exactly how a link gets opened.
+        const start = performance.now();
+        let frame = 0;
 
-                return newProgress;
-            });
-        }, 50);
+        const tick = (now: number) => {
+            const elapsed = now - start;
+            setProgress(Math.min(100, (elapsed / DURATION_MS) * 100));
 
-        return () => clearInterval(interval);
-    }, [onComplete]);
+            if (elapsed < DURATION_MS) {
+                frame = requestAnimationFrame(tick);
+            } else {
+                onComplete();
+            }
+        };
 
-    // Animation sequence steps
-    const steps = [
-        "Loading resume...",
-        "Parsing experience...",
-        "Formatting skills...",
-        "Preparing timeline...",
-        "Finalizing layout...",
-        "Ready!"
-    ];
+        frame = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(frame);
+    }, [onComplete, reducedMotion]);
+
+    if (reducedMotion) return null;
 
     return (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
-            <motion.div
-                className="bg-card border shadow-lg rounded-xl p-8 max-w-md w-full flex flex-col items-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-            >
-                <motion.div
-                    className="mb-6 bg-primary/10 p-4 rounded-full"
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                >
+        <motion.div
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            role="status"
+            aria-label="Loading resume"
+        >
+            <div className="bg-card border shadow-lg rounded-xl p-8 max-w-md w-full flex flex-col items-center">
+                <div className="mb-6 bg-primary/10 p-4 rounded-full">
                     <File className="h-10 w-10 text-primary" />
-                </motion.div>
-
-                <h2 className="text-xl font-bold mb-6">Loading Resume</h2>
-
-                <div className="w-full space-y-3 mb-6">
-                    {steps.map((step, index) => {
-                        // Calculate when each step should appear based on progress
-                        const stepProgress = (index + 1) * (100 / steps.length);
-                        const isVisible = progress >= stepProgress;
-
-                        return (
-                            <motion.div
-                                key={index}
-                                className="flex items-center gap-3"
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{
-                                    opacity: isVisible ? 1 : 0,
-                                    x: isVisible ? 0 : -10
-                                }}
-                                transition={{
-                                    duration: 0.3
-                                }}
-                            >
-                                <CheckCircle className="h-5 w-5 text-primary" />
-                                <span>{step}</span>
-                            </motion.div>
-                        );
-                    })}
                 </div>
+
+                <p className="text-xl font-bold mb-6">Loading Resume</p>
 
                 <ProgressBar
                     progress={progress}
                     height={6}
-                    showLabel={true}
-                    duration={0.2}
+                    showLabel={false}
+                    duration={0.1}
                     className="w-full"
                 />
-            </motion.div>
-        </div>
+            </div>
+        </motion.div>
     );
 }

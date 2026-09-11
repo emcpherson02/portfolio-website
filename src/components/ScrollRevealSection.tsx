@@ -1,125 +1,84 @@
 'use client'
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useInView, useAnimation, type Variants, type Transition } from 'motion/react';
+import React, { useRef, useSyncExternalStore } from 'react';
+import { motion, useInView, type Variants, type Transition } from 'motion/react';
 
 interface ScrollRevealSectionProps {
     children: React.ReactNode;
     id?: string;
     className?: string;
     delay?: number;
-    staggerChildren?: number;
-    threshold?: number;
     animation?: 'fade' | 'slide-up' | 'slide-right' | 'slide-left' | 'zoom' | 'none';
 }
 
+const VARIANTS: Record<NonNullable<ScrollRevealSectionProps['animation']>, Variants> = {
+    'fade': {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1 },
+    },
+    'slide-up': {
+        hidden: { opacity: 0, y: 50 },
+        visible: { opacity: 1, y: 0 },
+    },
+    'slide-right': {
+        hidden: { opacity: 0, x: -50 },
+        visible: { opacity: 1, x: 0 },
+    },
+    'slide-left': {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0 },
+    },
+    'zoom': {
+        hidden: { opacity: 0, scale: 0.8 },
+        visible: { opacity: 1, scale: 1 },
+    },
+    'none': {
+        hidden: { opacity: 1 },
+        visible: { opacity: 1 },
+    },
+};
+
+const subscribeToNothing = () => () => {};
+
 /**
- * A wrapper component that animates its children when scrolled into view
+ * Reveals its children when scrolled into view.
  */
 export function ScrollRevealSection({
                                         children,
                                         id,
                                         className = "",
                                         delay = 0,
-                                        staggerChildren = 0.1,
-                                        threshold = 0.2,
                                         animation = 'slide-up'
                                     }: ScrollRevealSectionProps) {
     const ref = useRef<HTMLDivElement>(null);
-    const isInView = useInView(ref, { once: true, amount: threshold });
-    const controls = useAnimation();
-    const [hasAnimated, setHasAnimated] = useState(false);
 
-    // Define animation variants
-    const getVariants = (): Variants => {
-        switch (animation) {
-            case 'fade':
-                return {
-                    hidden: { opacity: 0 },
-                    visible: { opacity: 1 }
-                };
-            case 'slide-up':
-                return {
-                    hidden: { opacity: 0, y: 50 },
-                    visible: { opacity: 1, y: 0 }
-                };
-            case 'slide-right':
-                return {
-                    hidden: { opacity: 0, x: -50 },
-                    visible: { opacity: 1, x: 0 }
-                };
-            case 'slide-left':
-                return {
-                    hidden: { opacity: 0, x: 50 },
-                    visible: { opacity: 1, x: 0 }
-                };
-            case 'zoom':
-                return {
-                    hidden: { opacity: 0, scale: 0.8 },
-                    visible: { opacity: 1, scale: 1 }
-                };
-            case 'none':
-            default:
-                return {
-                    hidden: { opacity: 1 },
-                    visible: { opacity: 1 }
-                };
-        }
-    };
+    // "some" rather than a fraction: `amount` is measured against the element,
+    // not the viewport, so a fraction can never be satisfied by a section
+    // taller than 1/amount viewports - it would stay hidden forever.
+    const isInView = useInView(ref, { once: true, amount: "some" });
 
-    // Child variants with staggered animation
-    const childVariants: Variants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.5 }
-        }
-    };
+    // False on the server and during the first client render, so the exported
+    // HTML carries the visible state instead of opacity:0. Without this, the
+    // static files render blank to crawlers and to any client whose JS fails.
+    const hydrated = useSyncExternalStore(subscribeToNothing, () => true, () => false);
 
-    // Container transitions
-    const containerTransition: Transition = {
+    const transition: Transition = {
         duration: 0.5,
-        delay: delay,
-        ease: [0.25, 0.1, 0.25, 1.0], // Easing function for smooth animation
-        staggerChildren: staggerChildren
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
     };
-
-    useEffect(() => {
-        if (isInView && !hasAnimated) {
-            controls.start('visible');
-            setHasAnimated(true);
-        }
-    }, [isInView, controls, hasAnimated]);
 
     return (
         <motion.div
             ref={ref}
             id={id}
             className={className}
-            initial="hidden"
-            animate={controls}
-            variants={getVariants()}
-            transition={containerTransition}
+            initial={false}
+            animate={!hydrated || isInView ? 'visible' : 'hidden'}
+            variants={VARIANTS[animation]}
+            transition={transition}
         >
-            {React.Children.map(children, (child, index) => {
-                // If the child is a React element, wrap it with motion.div
-                if (React.isValidElement(child) && staggerChildren > 0) {
-                    return (
-                        <motion.div
-                            key={index}
-                            variants={childVariants}
-                            transition={{
-                                delay: delay + (index * staggerChildren),
-                                duration: 0.4
-                            }}
-                        >
-                            {child}
-                        </motion.div>
-                    );
-                }
-                return child;
-            })}
+            {children}
         </motion.div>
     );
 }
