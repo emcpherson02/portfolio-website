@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowRight, Download, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowRight, Download, Mail } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 import { motion } from "motion/react";
 import { InteractiveTerminal } from "@/components/InteractiveTerminal";
 
@@ -72,7 +73,7 @@ export function Hero() {
                                     className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
                                 >
                                     <Link href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
-                                        <Github className="h-5 w-5" />
+                                        <GithubIcon className="h-5 w-5" />
                                     </Link>
                                 </Button>
                                 <Button
@@ -82,7 +83,7 @@ export function Hero() {
                                     className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
                                 >
                                     <Link href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
-                                        <Linkedin className="h-5 w-5" />
+                                        <LinkedinIcon className="h-5 w-5" />
                                     </Link>
                                 </Button>
                                 <Button

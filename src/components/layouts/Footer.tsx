@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Twitter, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -118,7 +119,7 @@ export function Footer() {
                                 rel="noopener noreferrer"
                                 aria-label="GitHub"
                             >
-                                <Github className="h-4 w-4" />
+                                <GithubIcon className="h-4 w-4" />
                                 <span className="sr-only">GitHub</span>
                             </Link>
                         </Button>
@@ -129,19 +130,8 @@ export function Footer() {
                                 rel="noopener noreferrer"
                                 aria-label="LinkedIn"
                             >
-                                <Linkedin className="h-4 w-4" />
+                                <LinkedinIcon className="h-4 w-4" />
                                 <span className="sr-only">LinkedIn</span>
-                            </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
-                            <Link
-                                href="https://twitter.com/elliotmcpherson"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Twitter"
-                            >
-                                <Twitter className="h-4 w-4" />
-                                <span className="sr-only">Twitter</span>
                             </Link>
                         </Button>
                         <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">

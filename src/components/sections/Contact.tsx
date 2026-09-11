@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mail, MapPin, Clock, Calendar, Linkedin, Github, FileText } from "lucide-react";
+import { Mail, MapPin, Clock, Calendar, FileText } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
 import Link from "next/link";
@@ -134,7 +135,7 @@ export function Contact() {
                                 className="rounded-xl border p-6 flex flex-col items-center text-center hover:shadow-md transition-all"
                             >
                                 <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
-                                    <Linkedin className="h-7 w-7 text-foreground" />
+                                    <LinkedinIcon className="h-7 w-7 text-foreground" />
                                 </div>
                                 <h4 className="font-medium text-lg mb-2">LinkedIn</h4>
                                 <p className="text-muted-foreground text-sm mb-4">Connect with me professionally</p>
@@ -154,7 +155,7 @@ export function Contact() {
                                 className="rounded-xl border p-6 flex flex-col items-center text-center hover:shadow-md transition-all"
                             >
                                 <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
-                                    <Github className="h-7 w-7 text-foreground" />
+                                    <GithubIcon className="h-7 w-7 text-foreground" />
                                 </div>
                                 <h4 className="font-medium text-lg mb-2">GitHub</h4>
                                 <p className="text-muted-foreground text-sm mb-4">Check out my projects and code</p>

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Github, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { GithubIcon } from "@/components/icons/BrandIcons";
 import { motion, useInView } from "motion/react";
 import { useRef, useState } from "react";
 import {awsConfig} from "@/config/aws-config";
@@ -135,7 +136,7 @@ function ProjectCard({
                             >
                                 <Button asChild variant="outline" size="sm">
                                     <Link href={githubUrl} target="_blank" rel="noopener noreferrer">
-                                        GitHub <Github className="ml-1 h-3 w-3" />
+                                        GitHub <GithubIcon className="ml-1 h-3 w-3" />
                                     </Link>
                                 </Button>
                             </motion.div>
