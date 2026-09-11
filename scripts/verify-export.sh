@@ -32,7 +32,10 @@ hidden=$(grep -rlE 'opacity: ?0[;"]' "$OUT" --include='*.html' 2>/dev/null || tr
     || check fail "opacity:0 present in: $(echo "$hidden" | tr '\n' ' ')"
 
 # The CV must exist as text in the HTML, not be gated behind a client timer.
-for term in "Rapid7" "Queen" "StudentWallet"; do
+# ElastiCache and Ballymena are inside collapsed disclosure panels. They catch
+# the panel being conditionally rendered, which keeps role detail out of the
+# page entirely rather than merely collapsed.
+for term in "Rapid7" "Queen" "StudentWallet" "ElastiCache" "Ballymena"; do
     grep -q "$term" "$OUT/resume/index.html" 2>/dev/null \
         && check pass "resume HTML contains '$term'" \
         || check fail "resume HTML missing '$term' - content is gated behind JS"

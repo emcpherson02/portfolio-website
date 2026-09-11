@@ -1,6 +1,5 @@
 'use client'
 
-import { motion, AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Calendar, Building, GraduationCap, Code } from "lucide-react";
@@ -115,26 +114,20 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
                                             </ul>
                                         )}
 
-                                        <AnimatePresence initial={false}>
-                                            {isActive && (
-                                                <motion.div
-                                                    id={panelId}
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: "auto" }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    transition={{ duration: 0.3 }}
-                                                    className="overflow-hidden text-sm"
-                                                >
-                                                    <ul className="space-y-2 list-disc pl-4 mt-3">
-                                                        {event.description.map((desc) => (
-                                                            <li key={desc} className="text-muted-foreground">
-                                                                {desc}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
+                                        {/* Always rendered, so the detail of each role is present
+                                            in the exported HTML for crawlers and link previews.
+                                            `hidden` keeps it out of the accessibility tree while
+                                            collapsed - which conditional rendering would do too,
+                                            but at the cost of it not being in the page at all. */}
+                                        <div id={panelId} hidden={!isActive} className="text-sm">
+                                            <ul className="space-y-2 list-disc pl-4 mt-3">
+                                                {event.description.map((desc) => (
+                                                    <li key={desc} className="text-muted-foreground">
+                                                        {desc}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
                                     </div>
                                 );
                             })}
