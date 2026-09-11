@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useInView, useAnimation, Variants } from 'framer-motion';
+import { motion, useInView, useAnimation, type Variants, type Transition } from 'motion/react';
 
 interface ScrollRevealSectionProps {
     children: React.ReactNode;
@@ -78,7 +78,7 @@ export function ScrollRevealSection({
     };
 
     // Container transitions
-    const containerTransition = {
+    const containerTransition: Transition = {
         duration: 0.5,
         delay: delay,
         ease: [0.25, 0.1, 0.25, 1.0], // Easing function for smooth animation

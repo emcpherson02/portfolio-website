@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Download, Github, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { InteractiveTerminal } from "@/components/InteractiveTerminal";
 
 export function Hero() {
