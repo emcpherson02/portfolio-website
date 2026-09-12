@@ -29,8 +29,7 @@ export function Hero() {
                         </p>
 
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
-                            {/* En space: a plain extra space would collapse in HTML. */}
-                            I&#39;m&ensp;<span className="text-primary">Elliott</span>
+                            Elliott McPherson
                         </h1>
 
                         <p className="text-xl md:text-2xl text-muted-foreground mt-5 text-balance">
