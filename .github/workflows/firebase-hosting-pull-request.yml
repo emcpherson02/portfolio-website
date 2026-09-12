@@ -32,9 +32,14 @@ jobs:
       - name: Build and verify export
         run: npm run verify
 
+      # channelId is set explicitly rather than left to the action's default,
+      # so the cleanup workflow knows exactly which channel to delete.
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ELMCP_PORTFOLIO_WEBSITE }}
           projectId: elmcp-portfolio-website
+          channelId: pr-${{ github.event.pull_request.number }}
+          # Backstop only. The cleanup workflow removes the channel on close;
+          # this covers a PR left open and forgotten.
           expires: 7d

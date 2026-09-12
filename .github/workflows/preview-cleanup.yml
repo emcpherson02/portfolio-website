@@ -1,0 +1,38 @@
+name: Cleanup preview
+
+# Runs when a PR is closed, merged or not, so preview channels are torn down
+# at the point they stop being useful rather than waiting out their 7-day
+# expiry.
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    # Same guard as the preview workflow: a PR from a fork must not reach
+    # repository secrets.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete the preview channel
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ELMCP_PORTFOLIO_WEBSITE }}
+          CHANNEL_ID: pr-${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+
+          # Written to the runner's temp dir, which is discarded with the VM.
+          # Passed via env rather than inline so it is not echoed by `set -x`.
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json"
+
+          # A PR closed without the preview ever running has no channel to
+          # delete, which is not a failure.
+          npx --yes firebase-tools@latest hosting:channel:delete "$CHANNEL_ID" \
+            --project elmcp-portfolio-website \
+            --force || echo "No channel '$CHANNEL_ID' to delete."
+
+          rm -f "$RUNNER_TEMP/sa.json"
