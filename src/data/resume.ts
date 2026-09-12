@@ -1,8 +1,8 @@
 import { type TimelineEvent } from "@/components/resume/InteractiveTimeline";
 
 export const summary = [
-    "Software engineer on the platform engineering team at Proofpoint, working on the infrastructure and delivery tooling behind their security products. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7.",
-    "Experienced in backend Java development, Kubernetes, and secure cloud infrastructure. Has deployed production SaaS with Kubernetes and Spinnaker, reduced AWS spend through resource analysis, and introduced security-first processes to a delivery team.",
+    "Platform engineer at Proofpoint, on the team that owns the Kubernetes clusters, AWS infrastructure and observability for an entire business unit. Works in production daily, primarily in Terraform, and is one of two engineers in the unit with AWS administrative access.",
+    "Recent work includes the unit's EKS migration and its move from Coralogix SaaS to a self-hosted deployment. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7 where he cut AWS spend by 18% and introduced a vulnerability remediation workflow.",
 ];
 
 // `year` is the year an entry is filed under in the timeline: the start year
@@ -18,7 +18,14 @@ export const events: TimelineEvent[] = [
         year: 2025,
         category: 'work',
         description: [
-            'Platform engineering for a cybersecurity product suite, covering infrastructure, delivery tooling and observability.',
+            'Own the Kubernetes clusters, AWS infrastructure and observability tooling for an entire business unit.',
+            'One of two engineers holding AWS administrative access for the unit, carrying out production changes on behalf of every other team.',
+            'Built the cluster-level workloads for the unit’s EKS migration, including node-exporter, CrowdStrike Falcon sensors, Honeycomb Refinery and Argo Workflows.',
+            'Drove the migration from Coralogix SaaS to a bring-your-own-cloud deployment, as one of two engineers owning the Coralogix vendor relationship.',
+            'Designed and delivered, solo, a Lambda and Slack application routing the unit’s CloudWatch logs to each owning team’s channel — adopted across every team.',
+            'Built Grafana dashboards tracking Istio gateway health, giving the unit live visibility throughout the EKS migration.',
+            'On call for production systems, running incident response through incident.io and PagerDuty.',
+            'Manage the unit’s AWS estate as code in Terraform.'
         ]
     },
     {
@@ -66,11 +73,13 @@ export const events: TimelineEvent[] = [
 ];
 
 export const technicalSkills = [
-    'Go', 'Java', 'Python', 'JavaScript/TypeScript', 'Spring Boot',
-    'Kubernetes', 'Helm', 'Istio', 'Docker', 'Terraform', 'GitOps',
+    'Terraform', 'Kubernetes', 'EKS', 'Helm', 'Istio', 'Docker', 'GitOps',
+    'AWS', 'Lambda', 'CloudWatch', 'GCP',
     'Argo CD', 'Argo Workflows', 'CircleCI', 'Jenkins',
-    'AWS', 'GCP', 'OpenTelemetry', 'Prometheus', 'Grafana',
-    'PostgreSQL', 'MongoDB', 'Redis', 'Microservices'
+    'OpenTelemetry', 'Prometheus', 'Grafana', 'Coralogix', 'Honeycomb',
+    'incident.io', 'PagerDuty',
+    'Go', 'Java', 'Python', 'JavaScript/TypeScript', 'Spring Boot',
+    'PostgreSQL', 'MongoDB', 'Redis'
 ];
 
 export const softSkills = [

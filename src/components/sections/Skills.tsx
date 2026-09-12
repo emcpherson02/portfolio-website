@@ -57,7 +57,7 @@ const CATEGORIES: SkillCategoryProps[] = [
     {
         title: "Cloud",
         icon: <CloudCog className="h-5 w-5" />,
-        skills: ["AWS", "GCP", "Kubernetes", "Helm", "Terraform", "Docker", "Argo CD", "GitOps", "Istio"],
+        skills: ["AWS", "EKS", "Kubernetes", "Helm", "Terraform", "Docker", "Argo CD", "GitOps", "Istio", "GCP"],
     },
     {
         title: "Databases",
@@ -65,9 +65,9 @@ const CATEGORIES: SkillCategoryProps[] = [
         skills: ["PostgreSQL", "MongoDB", "Redis", "SQL"],
     },
     {
-        title: "Observability",
+        title: "Observability & Incident Response",
         icon: <LineChart className="h-5 w-5" />,
-        skills: ["OpenTelemetry", "Prometheus", "Grafana", "Honeycomb", "Coralogix", "DataDog", "Wireshark"],
+        skills: ["OpenTelemetry", "Prometheus", "Grafana", "Coralogix", "Honeycomb", "Refinery", "DataDog", "CloudWatch", "incident.io", "PagerDuty"],
     },
 ];
 
