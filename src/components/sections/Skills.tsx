@@ -42,32 +42,32 @@ const CATEGORIES: SkillCategoryProps[] = [
     {
         title: "Frontend Development",
         icon: <Code className="h-5 w-5" />,
-        skills: ["React", "TypeScript", "JavaScript", "Next.js", "TailwindCSS", "HTML/CSS", "Flutter", "Responsive Design", "Figma"],
+        skills: ["React", "TypeScript", "JavaScript", "Next.js", "TailwindCSS", "HTML/CSS", "Figma"],
     },
     {
         title: "Backend Development",
         icon: <Server className="h-5 w-5" />,
-        skills: ["Java", "Spring Boot", "Node.js", "Express", "Python", "C++", "REST APIs", "Swift"],
+        skills: ["Java", "Spring Boot", "Node.js", "Python"],
     },
     {
-        title: "Testing & CI/CD",
+        title: "CI/CD",
         icon: <GitBranch className="h-5 w-5" />,
-        skills: ["Git", "Jenkins", "GitLab CI", "Maven", "Mockito", "Jest / Supertest", "Cucumber (Gherkin)", "LocalStack", "TDD", "Pair Programming"],
+        skills: ["Git", "Jenkins", "GitLab CI", "CircleCI", "Argo Workflows"],
     },
     {
-        title: "Cloud & Deployment",
+        title: "Cloud",
         icon: <CloudCog className="h-5 w-5" />,
-        skills: ["AWS", "GCP", "Kubernetes", "Spinnaker", "Terraform", "Docker", "Cloud Run", "Firestore", "ElastiCache", "Lambda", "EC2", "SQS", "SNS", "S3", "CloudFront"],
+        skills: ["AWS", "GCP", "Kubernetes", "Terraform", "Docker", "Argo CD", "GitOps", "Istio"],
     },
     {
         title: "Databases",
         icon: <Database className="h-5 w-5" />,
-        skills: ["NoSQL", "MongoDB", "SQL", "DynamoDB"],
+        skills: ["MongoDB", "SQL"],
     },
     {
         title: "Monitoring & Security",
         icon: <LineChart className="h-5 w-5" />,
-        skills: ["Snyk", "Wireshark", "DataDog", "IDA", "CloudWatch", "k9s"],
+        skills: ["Snyk", "Wireshark", "DataDog", "Coralogix", "Honeycomb", "Grafana", "OpenTelemetry", "Prometheus"],
     },
 ];
 

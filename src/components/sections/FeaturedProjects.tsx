@@ -126,12 +126,9 @@ export function FeaturedProjects() {
             <div className="container">
                 <div className="mb-10 sm:mb-16">
                     <Badge variant="outline" className="mb-4">My Work</Badge>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
                         Featured Projects
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl">
-                        A showcase of my recent development work, featuring full-stack applications built with modern technologies.
-                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 sm:gap-8">
