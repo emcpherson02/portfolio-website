@@ -1,128 +1,71 @@
 # Portfolio
 
-Personal portfolio and CV for Elliott McPherson. Next.js App Router, exported
-as a static site and served from Firebase Hosting.
+Personal portfolio and CV for Elliott McPherson, platform engineer in Belfast.
+A static site, exported from Next.js and served from Firebase Hosting.
 
-**Live:** not currently deployed.
+**elliottmcpherson-portfolio.co.uk**
 
-## Running it
+## Stack
 
-Requires Node 20.9 or newer (developed on 22).
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Motion ·
+shadcn/ui · lucide
 
-```bash
-npm ci
-npm run dev          # http://localhost:3000
-```
-
-## Scripts
-
-| Script | What it does |
-|---|---|
-| `npm run dev` | Dev server. Fast, but see the warning below |
-| `npm run build` | Type-checks, then builds and exports to `out/` |
-| `npm run preview` | Builds and serves `out/` on :3001 — the real deployable output |
-| `npm run verify` | Builds, then asserts the export is actually shippable |
-| `npm run lint` | ESLint |
-| `npm run check:a11y` | axe against a running `preview` server |
-
-### Verify what you ship, not what dev shows you
-
-`npm run dev` cannot catch a whole class of bug in this project, because the
-dev server hydrates immediately and the exported HTML is what actually gets
-deployed. Two real examples, both of which shipped in this repo:
-
-- Motion serialises `initial` into the markup, so `initial={{ opacity: 0 }}`
-  put every section into the HTML invisible. With JS it looked fine; to a
-  crawler or link-preview bot the page was blank.
-- The resume gated all its content behind a 3-second timer, so the exported
-  `/resume` contained a loading splash and nothing else — no CV text at all.
-
-`scripts/verify-export.sh` asserts against the built output: nothing ships at
-`opacity: 0`, the CV exists as text (including inside collapsed timeline
-panels), internal links carry trailing slashes so they hit the exported files
-directly, and the PDF was copied. **Run `npm run verify` before deploying.**
+Tailwind 4 is configured in CSS rather than a config file — theme tokens live in
+`@theme inline` in `src/app/globals.css`.
 
 ## Architecture
 
-Two routes, both client components — the site is animation-heavy and has no
-server-side data fetching.
+Two routes, both client components. The site is animation-heavy and has no
+server-side data fetching, API routes or dynamic segments, so it exports to
+static files (`output: 'export'`).
 
-- `src/app/page.tsx` — the single-page portfolio, composing the sections in
-  `src/components/sections/`, each wrapped in `ScrollRevealSection`.
-- `src/app/resume/page.tsx` — the CV. Content comes from `src/data/resume.ts`.
+| | |
+|---|---|
+| `src/app/page.tsx` | Single-page portfolio, composed from `src/components/sections/` |
+| `src/app/resume/page.tsx` | CV, with content in `src/data/resume.ts` |
 
-`ScrollRevealSection` renders visible on the server and only arms its hidden
-state once hydrated, so nothing reaches the HTML invisible. It uses
-`amount: "some"` deliberately: a numeric `amount` is measured against the
-element rather than the viewport, so a section taller than the viewport can
-never satisfy it and stays hidden forever.
+Two decisions worth knowing before editing:
 
-Timeline disclosure panels are always rendered and toggled with `hidden`,
-rather than conditionally rendered, so role detail is in the page for
-crawlers and print while staying out of the accessibility tree when collapsed.
+**`ScrollRevealSection` renders visible on the server** and only arms its hidden
+state once hydrated. Motion serialises `initial` into the markup, so an
+`initial={{ opacity: 0 }}` puts a section into the exported HTML invisible.
 
-## Styling
+**Timeline disclosure panels are always rendered** and toggled with the `hidden`
+attribute rather than conditionally rendered, so each role's detail is in the
+page for crawlers and for print while staying out of the accessibility tree when
+collapsed.
 
-Tailwind 4 with CSS-native config — there is no `tailwind.config.js`. Theme
-tokens live in `@theme inline` in `src/app/globals.css`, alongside the print
-stylesheet. UI primitives in `src/components/ui/` are shadcn/ui (new-york);
-add more with `npx shadcn add <component>` rather than hand-rolling them.
+## Verifying the export
 
-There is no dark mode. The `@custom-variant dark` line in `globals.css` is
-load-bearing anyway — see the comment there before removing it.
+`next dev` hydrates immediately, so it structurally cannot show bugs that exist
+only in the exported HTML — content shipping at `opacity: 0`, or a page whose
+text is gated behind a client-side timer. Both of those shipped here before.
 
-## Deployment
+`scripts/verify-export.sh` asserts against the built output instead: nothing
+hidden, the CV present as text, internal links carrying trailing slashes, static
+assets copied. It runs in CI ahead of every deploy, so a build that would
+publish a blank page fails first.
 
-Static export to Firebase Hosting, on a domain registered with GoDaddy.
-Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, builds,
-runs the export checks above, and deploys only if they pass.
+## CI/CD
 
-### First-time setup
+GitHub Actions, on Firebase Hosting.
 
-```bash
-npm i -g firebase-tools
-firebase login
-firebase projects:create          # or use an existing project
-firebase use --add                # writes .firebaserc - commit it
-```
+- **Push to `main`** — lint, build, export checks, then deploy to the live channel
+- **Pull request** — the same checks, then a preview channel
+- **PR closed** — the preview channel is deleted
 
-`.firebaserc` is generated by the CLI rather than kept in the repo as a
-template. The CLI reads it on startup for nearly every command, so a file
-containing a placeholder id makes even `firebase login` fail.
+Auth is a Google service account held in repository secrets. Workflows touching
+it are guarded against pull requests from forks.
 
-Then deploy by hand once to confirm it works:
+Cache headers and the Content-Security-Policy are in `firebase.json`.
 
-```bash
-npm run build
-firebase deploy --only hosting
-```
+## Scripts
 
-### Custom domain
-
-Firebase console → Hosting → Add custom domain. It issues a TXT record for
-ownership, then A records for the domain itself.
-
-In GoDaddy's DNS manager, add the TXT record first, then the A records once
-Firebase shows them. Remove any parked-page A records GoDaddy created at
-signup, or certificate provisioning will not complete. SSL is issued
-automatically and usually lands within a few hours.
-
-Unlike a CNAME-based CDN, Firebase serves the apex directly from A records, so
-`elliottmcpherson-portfolio.co.uk` works without a redirect to `www`.
-
-### CI credentials
-
-```bash
-firebase init hosting:github
-```
-
-That creates a service account and writes `FIREBASE_SERVICE_ACCOUNT` into the
-repository secrets. Also add a repository **variable** `FIREBASE_PROJECT_ID`
-with the project id.
-
-### Cost
-
-The Spark plan is free with no time limit: 10 GB stored, 360 MB/day
-transferred — roughly 900 full page loads a day for this site. Exceeding a
-quota pauses serving until the next window rather than generating a bill, and
-no card is required.
+| | |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | Type-check, build, export to `out/` |
+| `npm run preview` | Build and serve `out/` — the actual deployable output |
+| `npm run verify` | Build, then assert the export is shippable |
+| `npm run lint` | ESLint |
+| `npm run check:a11y` | axe, against a running `preview` |
