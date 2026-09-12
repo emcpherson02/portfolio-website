@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, FileText } from "lucide-react";
+import { motion } from "motion/react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 
@@ -11,15 +12,15 @@ interface NavbarProps {
     className?: string;
 }
 
+/** Sections of the homepage. These scroll; they do not navigate. */
 const SECTION_LINKS = [
-    { id: 'home', href: '/', label: 'Home' },
-    { id: 'projects', href: '/#projects', label: 'Projects' },
-    { id: 'skills', href: '/#skills', label: 'Skills' },
+    { id: 'home', label: 'Home' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'contact', label: 'Contact' },
 ] as const;
 
-const CONTACT_LINK = { id: 'contact', href: '/#contact', label: 'Contact' } as const;
-
-const SECTION_IDS = ['home', 'projects', 'skills', 'contact'];
+const SECTION_IDS = SECTION_LINKS.map((l) => l.id);
 
 export function Navbar({ className }: NavbarProps) {
     const pathname = usePathname();
@@ -28,9 +29,9 @@ export function Navbar({ className }: NavbarProps) {
     const [activeSection, setActiveSection] = useState('home');
 
     const onHome = pathname === '/';
+    const onResume = pathname === '/resume';
 
-    // Scroll position only. Throttled through rAF because the previous version
-    // ran on every scroll event and forced layout each time.
+    // Scroll position only, rAF-throttled and passive.
     useEffect(() => {
         let frame = 0;
 
@@ -50,8 +51,6 @@ export function Navbar({ className }: NavbarProps) {
         };
     }, []);
 
-    // Scroll-spy via IntersectionObserver rather than measuring every section
-    // against the viewport on each scroll event.
     useEffect(() => {
         if (!onHome) return;
 
@@ -76,8 +75,6 @@ export function Navbar({ className }: NavbarProps) {
         return () => observer.disconnect();
     }, [onHome]);
 
-    // Close the mobile menu on Escape, on outside click, and once the viewport
-    // is wide enough that it is no longer reachable.
     useEffect(() => {
         if (!isMenuOpen) return;
 
@@ -101,8 +98,7 @@ export function Navbar({ className }: NavbarProps) {
         };
     }, [isMenuOpen]);
 
-    // Only intercept when already on the homepage. Off it, the Link navigates
-    // normally, which keeps the client router rather than reloading the page.
+    // Only intercept on the homepage. Elsewhere the Link navigates normally.
     const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
         setIsMenuOpen(false);
         if (!onHome) return;
@@ -111,74 +107,86 @@ export function Navbar({ className }: NavbarProps) {
         const element = document.getElementById(targetId);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            window.history.pushState({}, '', `#${targetId}`);
+            window.history.pushState({}, '', targetId === 'home' ? '/' : `#${targetId}`);
         }
     };
-
-    const linkClass = (id: string, extra: string) => cn(
-        "text-sm font-medium transition-colors hover:text-primary",
-        extra,
-        onHome && activeSection === id ? "text-primary" : ""
-    );
-
-    const desktopLink = (id: string, extra = "") => cn(
-        linkClass(id, cn("relative py-1", extra)),
-        onHome && activeSection === id
-            ? "after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary after:rounded-full"
-            : ""
-    );
-
-    const allLinks = [...SECTION_LINKS, CONTACT_LINK];
 
     return (
         <header
             className={cn(
                 "fixed top-0 z-50 w-full transition-all duration-300",
                 scrolled
-                    ? "bg-background/95 backdrop-blur-md border-b shadow-sm"
+                    ? "bg-background/80 backdrop-blur-md border-b"
                     : "bg-transparent",
                 className
             )}
         >
-            <div className="container flex h-16 items-center justify-between">
-                <div className="flex items-center">
-                    <Link href="/" className="font-bold text-xl flex items-center gap-2">
-                        <span className={cn(
-                            "transition-opacity duration-300",
-                            scrolled ? "opacity-100" : "opacity-0 md:opacity-100"
-                        )}>
-                            Elliott McPherson
-                        </span>
-                    </Link>
-                </div>
-
-                <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="Main">
-                    {SECTION_LINKS.map(({ id, href, label }) => (
-                        <Link
-                            key={id}
-                            href={href}
-                            className={desktopLink(id)}
-                            onClick={id === 'home' ? undefined : (e) => handleNavClick(e, id)}
-                        >
-                            {label}
-                        </Link>
-                    ))}
-                    <Link
-                        href="/resume"
+            <div className="container flex h-16 items-center justify-between gap-4">
+                {/* Monogram rather than the full name, which the hero and the
+                    resume masthead both already carry. */}
+                <Link
+                    href="/"
+                    aria-label="Elliott McPherson — home"
+                    className="group shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                    <span
                         className={cn(
-                            "text-sm font-medium transition-colors hover:text-primary",
-                            pathname === '/resume' ? "text-primary" : ""
+                            "flex h-9 w-9 items-center justify-center rounded-lg border font-mono text-sm font-bold tracking-tight",
+                            "border-primary/30 bg-primary/5 text-primary",
+                            "transition-colors duration-200",
+                            "group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary"
                         )}
                     >
-                        Resume
-                    </Link>
-                    <Link
-                        href={CONTACT_LINK.href}
-                        className={desktopLink(CONTACT_LINK.id)}
-                        onClick={(e) => handleNavClick(e, CONTACT_LINK.id)}
+                        EM
+                    </span>
+                </Link>
+
+                <nav className="hidden md:flex items-center gap-1" aria-label="Main">
+                    {SECTION_LINKS.map(({ id, label }) => {
+                        const isActive = onHome && activeSection === id;
+
+                        return (
+                            <Link
+                                key={id}
+                                href={id === 'home' ? '/' : `/#${id}`}
+                                onClick={(e) => handleNavClick(e, id)}
+                                aria-current={isActive ? 'true' : undefined}
+                                className={cn(
+                                    "relative px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                                    "hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                    isActive ? "text-primary" : "text-foreground/80"
+                                )}
+                            >
+                                {label}
+                                {/* Shared layoutId, so the marker slides between
+                                    items rather than cutting. */}
+                                {isActive && (
+                                    <motion.span
+                                        layoutId="nav-active"
+                                        aria-hidden="true"
+                                        className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-primary"
+                                        transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                                    />
+                                )}
+                            </Link>
+                        );
+                    })}
+
+                    {/* Resume is a page, not a section of this one. The divider and
+                        the button treatment are what say so. */}
+                    <span aria-hidden="true" className="mx-2 h-5 w-px bg-border" />
+
+                    <Button
+                        asChild
+                        size="sm"
+                        variant={onResume ? "default" : "outline"}
+                        className="gap-1.5"
                     >
-                        {CONTACT_LINK.label}
-                    </Link>
+                        <Link href="/resume" aria-current={onResume ? 'page' : undefined}>
+                            <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+                            Resume
+                        </Link>
+                    </Button>
                 </nav>
 
                 <Button
@@ -200,37 +208,52 @@ export function Navbar({ className }: NavbarProps) {
                 id="mobile-menu"
                 inert={!isMenuOpen}
                 className={cn(
-                    "fixed inset-x-0 top-16 z-50 md:hidden transform transition-transform duration-300 ease-in-out",
-                    isMenuOpen ? "translate-y-0" : "-translate-y-full"
+                    "absolute inset-x-0 top-16 md:hidden origin-top transition-all duration-200 ease-out",
+                    isMenuOpen
+                        ? "opacity-100 translate-y-0"
+                        : "opacity-0 -translate-y-2 pointer-events-none"
                 )}
             >
-                <div className="bg-background/95 backdrop-blur-md border-b shadow-sm">
-                    <div className="container py-5">
-                        <nav className="flex flex-col space-y-4" aria-label="Mobile">
-                            {allLinks.map(({ id, href, label }) => (
+                <div className="mx-4 rounded-xl border bg-background/95 backdrop-blur-md shadow-lg overflow-hidden">
+                    <nav className="flex flex-col p-2" aria-label="Mobile">
+                        {SECTION_LINKS.map(({ id, label }) => {
+                            const isActive = onHome && activeSection === id;
+
+                            return (
                                 <Link
                                     key={id}
-                                    href={href}
-                                    className={linkClass(id, "py-2")}
-                                    onClick={id === 'home'
-                                        ? () => setIsMenuOpen(false)
-                                        : (e) => handleNavClick(e, id)}
+                                    href={id === 'home' ? '/' : `/#${id}`}
+                                    onClick={(e) => handleNavClick(e, id)}
+                                    aria-current={isActive ? 'true' : undefined}
+                                    className={cn(
+                                        "rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                                        isActive
+                                            ? "bg-primary/10 text-primary"
+                                            : "text-foreground/80 hover:bg-muted"
+                                    )}
                                 >
                                     {label}
                                 </Link>
-                            ))}
-                            <Link
-                                href="/resume"
-                                className={cn(
-                                    "text-sm font-medium transition-colors hover:text-primary py-2",
-                                    pathname === '/resume' ? "text-primary" : ""
-                                )}
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                Resume
-                            </Link>
-                        </nav>
-                    </div>
+                            );
+                        })}
+
+                        <span aria-hidden="true" className="my-2 h-px bg-border" />
+
+                        <Link
+                            href="/resume"
+                            onClick={() => setIsMenuOpen(false)}
+                            aria-current={onResume ? 'page' : undefined}
+                            className={cn(
+                                "flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                                onResume
+                                    ? "bg-primary text-primary-foreground"
+                                    : "border bg-card hover:bg-muted"
+                            )}
+                        >
+                            <FileText className="h-4 w-4" aria-hidden="true" />
+                            Resume
+                        </Link>
+                    </nav>
                 </div>
             </div>
         </header>
