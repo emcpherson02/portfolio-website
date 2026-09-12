@@ -25,10 +25,9 @@ export const viewport: Viewport = {
     minimumScale: 1,
 };
 
-// Must match the canonical address the site is served from. The apex redirects
-// here via GoDaddy forwarding, since DNS forbids a CNAME at a zone apex and
-// GoDaddy has no ALIAS record.
-const SITE_URL = "https://www.elliottmcpherson-portfolio.co.uk";
+// Canonical address. Firebase serves the apex directly from an A record, so
+// there is no www hop to redirect through.
+const SITE_URL = "https://elliottmcpherson-portfolio.co.uk";
 const TITLE = "Elliott McPherson | Full-Stack Developer";
 const DESCRIPTION = "Portfolio of Elliott McPherson - software engineer in Belfast, with experience in Java, cloud infrastructure and full-stack web development.";
 
