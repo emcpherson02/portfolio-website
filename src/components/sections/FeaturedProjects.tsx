@@ -64,12 +64,11 @@ function ProjectImage({ src, alt, title }: { src: string; alt: string; title: st
                 alt={alt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                // contain, not cover: screenshots vary in aspect and cover would
-                // crop them - losing the form fields off one and the terminal
-                // off the other. Letterboxing against the card ground is the
-                // lesser cost when the whole point is seeing the screen.
+                // cover, anchored to the top: cards stay a consistent size and
+                // the image fills them. Screenshots are cropped from the bottom
+                // rather than the middle, which keeps headers and titles.
                 className={cn(
-                    "object-contain transition-all duration-500 group-hover:scale-[1.02]",
+                    "object-cover object-top transition-all duration-500 group-hover:scale-[1.03]",
                     status === 'loaded' ? "opacity-100" : "opacity-0"
                 )}
                 onLoad={() => setStatus('loaded')}
