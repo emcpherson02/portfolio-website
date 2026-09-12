@@ -24,17 +24,6 @@ static files (`output: 'export'`).
 | `src/app/page.tsx` | Single-page portfolio, composed from `src/components/sections/` |
 | `src/app/resume/page.tsx` | CV, with content in `src/data/resume.ts` |
 
-Two decisions worth knowing before editing:
-
-**`ScrollRevealSection` renders visible on the server** and only arms its hidden
-state once hydrated. Motion serialises `initial` into the markup, so an
-`initial={{ opacity: 0 }}` puts a section into the exported HTML invisible.
-
-**Timeline disclosure panels are always rendered** and toggled with the `hidden`
-attribute rather than conditionally rendered, so each role's detail is in the
-page for crawlers and for print while staying out of the accessibility tree when
-collapsed.
-
 ## Verifying the export
 
 `next dev` hydrates immediately, so it structurally cannot show bugs that exist
