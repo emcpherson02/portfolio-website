@@ -56,11 +56,13 @@ function SkillCategory({ title, icon, skills }: SkillCategory) {
                 <span className="text-primary" aria-hidden="true">{icon}</span>
                 {title}
             </h3>
+            {/* Full-strength foreground on a plain background: muted text on a
+                muted fill left these barely legible at this size. */}
             <ul className="flex flex-wrap gap-1.5">
                 {skills.map((skill) => (
                     <li
                         key={skill}
-                        className="rounded-md bg-muted/60 px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        className="rounded-md border bg-background px-2.5 py-1 font-mono text-[13px] leading-5 text-foreground transition-colors hover:border-foreground/30"
                     >
                         {skill}
                     </li>
@@ -74,11 +76,7 @@ export function Skills() {
     return (
         <section id="skills" className="w-full py-20 sm:py-28 bg-muted/20 scroll-mt-16">
             <div className="container">
-                <SectionHeader
-                    label="Expertise"
-                    title="Skills & Technologies"
-                    description="The tooling I work with day to day, weighted towards infrastructure, delivery and observability."
-                />
+                <SectionHeader label="Expertise" title="Skills & Technologies" />
 
                 {/* Rules and space rather than six bordered cards, which turned a
                     list of tags into a grid of boxes. */}

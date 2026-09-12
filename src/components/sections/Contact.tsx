@@ -86,7 +86,10 @@ export function Contact() {
                                         rel="noopener noreferrer"
                                         className="group flex items-center gap-4 py-5 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
                                     >
-                                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                                        {/* A 10% tint rather than a solid fill: --primary
+                                            is a near-black slate, so filling it turned the
+                                            tile black on hover. */}
+                                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground transition-colors group-hover:bg-primary/10">
                                             <Icon className="h-5 w-5" />
                                         </span>
                                         <span className="flex-1 min-w-0">
