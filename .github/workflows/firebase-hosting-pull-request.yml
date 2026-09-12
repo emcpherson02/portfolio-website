@@ -42,4 +42,4 @@ jobs:
           channelId: pr-${{ github.event.pull_request.number }}
           # Backstop only. The cleanup workflow removes the channel on close;
           # this covers a PR left open and forgotten.
-          expires: 7d
+          expires: 1d
