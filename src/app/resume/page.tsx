@@ -81,10 +81,6 @@ export default function ResumePage() {
                     <div className="lg:col-span-2 space-y-8">
                         <section className="bg-card rounded-xl p-6 border shadow-sm">
                             <h2 className="text-xl font-bold border-b pb-2 mb-6">Professional Timeline</h2>
-                            <p className="text-muted-foreground mb-6">
-                                Select an entry to expand it and see more detail about that
-                                experience, qualification or project.
-                            </p>
 
                             <InteractiveTimeline events={events} />
                         </section>
