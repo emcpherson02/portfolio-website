@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Asserts the exported static site is actually deployable.
 # Every check here guards a bug that `next dev` cannot surface, because dev
-# hydrates instantly and the export is what S3 actually serves.
+# hydrates instantly, whereas the exported files are what actually gets served.
 set -uo pipefail
 
 OUT="${1:-out}"
@@ -20,7 +20,7 @@ echo "Verifying export in ./$OUT"
 
 [ -d "$OUT" ] || { echo "  FAIL  no $OUT/ directory - run the build first"; exit 1; }
 
-# Routes exist as real S3 keys (trailingSlash: true emits dir/index.html).
+# Routes exist as real files (trailingSlash: true emits dir/index.html).
 for page in "index.html" "resume/index.html" "404.html"; do
     [ -f "$OUT/$page" ] && check pass "$page exists" || check fail "$page missing"
 done
