@@ -41,16 +41,23 @@ the stack then continues on its own.
 
 Take `DistributionDomainName` from the stack outputs (`dxxxxx.cloudfront.net`).
 
-In GoDaddy DNS:
-- `www` → CNAME → the CloudFront domain.
-- The apex is the awkward one. CNAMEs are not allowed at a zone apex, and
-  GoDaddy has no ALIAS/ANAME record. Options, best first:
-  1. Move the domain's nameservers to Route 53 and use an A/ALIAS record at
-     the apex. Cleanest, and lets future certificates auto-validate.
-  2. Use GoDaddy's forwarding to redirect the apex to `www`. Works, but adds a
-     redirect hop and forwarding has historically been flaky.
+DNS stays at GoDaddy. `www` is the canonical address and the apex redirects to
+it:
 
-If you would rather serve the apex properly, do option 1 before going further.
+- **`www`** → CNAME → the CloudFront domain. Straightforward.
+- **The apex** (the bare domain) cannot be a CNAME. A CNAME may not coexist
+  with other records at the same name, and the apex must carry SOA and NS
+  records, so the DNS spec forbids it. GoDaddy has no ALIAS/ANAME record to
+  work around this. Use **Domain Forwarding** instead: forward the apex to
+  `https://www.YOURDOMAIN.com`, permanent (301), forward only.
+
+That costs one redirect for anyone typing the bare domain. It is fine for SEO
+as long as one version is consistently canonical, which is why `www` is set as
+the canonical URL in `src/app/layout.tsx`.
+
+The distribution is created with both names as aliases and the certificate
+covers both, so switching the apex to a proper ALIAS later — by moving
+nameservers to Route 53, about $6/year — needs no changes here.
 
 ### 3. Deploy role
 
@@ -86,8 +93,8 @@ Then push to `main`, or run the workflow manually.
 
 CloudFront's free tier — 1 TB out and 10M requests a month — is permanent
 rather than 12-month, and a personal portfolio will not approach it. S3 holds
-a few MB. Realistically this is pennies a month, dominated by the Route 53
-hosted zone at $0.50/month if you take that option.
+a few MB, and DNS stays at GoDaddy where it is already paid for. Realistically
+this runs at pennies a month.
 
 `PriceClass_100` (US/Canada/Europe) is the default. Widen it only if you
 expect traffic from elsewhere.
