@@ -5,83 +5,81 @@ import { ArrowRight, Download, Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 import { InteractiveTerminal } from "@/components/InteractiveTerminal";
 
+const SOCIALS = [
+    { href: "https://github.com/emcpherson02", label: "GitHub", Icon: GithubIcon },
+    { href: "https://linkedin.com/in/elliott-mcpherson", label: "LinkedIn", Icon: LinkedinIcon },
+    { href: "mailto:elliott.mcpherson985@gmail.com", label: "Email", Icon: Mail },
+];
+
 export function Hero() {
     return (
-        <section id="home" className="w-full py-16 md:py-24 lg:py-32 xl:py-36 overflow-hidden scroll-mt-16">
+        <section id="home" className="w-full py-20 md:py-28 lg:py-36 overflow-hidden scroll-mt-16">
             <div className="container relative">
+                {/* Ambient wash. Static - a pulsing blur behind the terminal
+                    competed with the typing animation in front of it. */}
                 <div className="absolute inset-0 -z-10" aria-hidden="true">
-                    <div className="absolute top-0 left-1/3 w-2/3 h-1/2 bg-primary/5 rounded-full blur-3xl" />
-                    <div className="absolute bottom-1/4 right-0 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
+                    <div className="absolute top-0 left-1/4 w-2/3 h-1/2 bg-primary/5 rounded-full blur-3xl" />
+                    <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div className="flex flex-col space-y-6">
-                        <div className="space-y-3">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                                Hi, I&#39;m <span className="text-primary">Elliott McPherson</span>
-                            </h1>
-                            <p className="text-xl md:text-2xl text-muted-foreground">
-                                Software Engineer building secure, scalable cloud infrastructure
-                            </p>
-                        </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div className="flex flex-col">
+                        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary mb-4">
+                            Platform Engineer · Belfast
+                        </p>
 
-                        <p className="text-muted-foreground max-w-md text-lg">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
+                            Hi, I&#39;m <span className="text-primary">Elliott McPherson</span>
+                        </h1>
+
+                        <p className="text-xl md:text-2xl text-muted-foreground mt-5 text-balance">
+                            Software Engineer building secure, scalable cloud infrastructure
+                        </p>
+
+                        <p className="text-muted-foreground max-w-lg mt-6 leading-relaxed">
                             I build and operate the infrastructure other engineers build on
                             top of: Kubernetes clusters, Terraform-managed cloud, and the
                             observability that catches problems before anyone else notices.
                         </p>
 
-                        <div className="flex flex-wrap gap-4 pt-2">
-                            <Button asChild size="lg" className="rounded-md shadow-lg">
+                        <div className="flex flex-wrap gap-3 mt-9">
+                            <Button asChild size="lg" className="group">
                                 <a href="#projects">
-                                    View My Work <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden="true" />
+                                    View my work
+                                    <ArrowRight
+                                        className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                                        aria-hidden="true"
+                                    />
                                 </a>
                             </Button>
-                            <Button
-                                asChild
-                                variant="outline"
-                                size="lg"
-                                className="rounded-md border-2 hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors"
-                            >
+                            <Button asChild size="lg" variant="outline">
                                 <a href="/CV_Elliott_McPherson.pdf" download>
-                                    Download CV <Download className="ml-1.5 h-4 w-4" aria-hidden="true" />
+                                    Download CV
+                                    <Download className="ml-1.5 h-4 w-4" aria-hidden="true" />
                                 </a>
                             </Button>
                         </div>
 
-                        <div className="pt-6 flex items-center">
-                            <div className="text-sm text-muted-foreground mr-2">Find me on</div>
-                            <div className="flex gap-3">
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    asChild
-                                    className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
-                                >
-                                    <a href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-                                        <GithubIcon className="h-5 w-5" />
+                        {/* Plain links rather than three outlined circles, which
+                            read as a third and fourth button. */}
+                        <div className="flex items-center gap-6 mt-10 pt-8 border-t">
+                            <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                                Find me
+                            </span>
+                            <div className="flex items-center gap-5">
+                                {SOCIALS.map(({ href, label, Icon }) => (
+                                    <a
+                                        key={label}
+                                        href={href}
+                                        {...(href.startsWith('http')
+                                            ? { target: "_blank", rel: "noopener noreferrer" }
+                                            : {})}
+                                        aria-label={label}
+                                        className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                                    >
+                                        <Icon className="h-5 w-5" />
                                     </a>
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    asChild
-                                    className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
-                                >
-                                    <a href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-                                        <LinkedinIcon className="h-5 w-5" />
-                                    </a>
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    asChild
-                                    className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
-                                >
-                                    <a href="mailto:elliott.mcpherson985@gmail.com" aria-label="Email me">
-                                        <Mail className="h-5 w-5" />
-                                    </a>
-                                </Button>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -89,14 +87,10 @@ export function Hero() {
                     <div className="relative flex justify-center lg:justify-end">
                         <div className="relative w-full max-w-md lg:max-w-lg">
                             <div
-                                className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-primary/30 rounded-2xl blur opacity-30 motion-safe:animate-pulse"
+                                className="absolute -inset-px bg-gradient-to-br from-primary/40 to-transparent rounded-2xl blur-sm opacity-40"
                                 aria-hidden="true"
                             />
-
                             <InteractiveTerminal />
-
-                            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl" aria-hidden="true" />
-                            <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-full blur-xl" aria-hidden="true" />
                         </div>
                     </div>
                 </div>

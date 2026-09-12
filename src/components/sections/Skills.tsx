@@ -1,6 +1,5 @@
 'use client'
 
-import { Badge } from "@/components/ui/badge";
 import {
     Code,
     Database,
@@ -9,28 +8,61 @@ import {
     LineChart,
     CloudCog
 } from "lucide-react";
+import { SectionHeader } from "@/components/sections/SectionHeader";
 
-interface SkillCategoryProps {
+interface SkillCategory {
     title: string;
     icon: React.ReactNode;
     skills: string[];
 }
 
-function SkillCategory({ title, icon, skills }: SkillCategoryProps) {
+const CATEGORIES: SkillCategory[] = [
+    {
+        title: "Cloud",
+        icon: <CloudCog className="h-4 w-4" />,
+        skills: ["AWS", "EKS", "Kubernetes", "Helm", "Terraform", "Docker", "Argo CD", "GitOps", "Istio", "GCP"],
+    },
+    {
+        title: "Observability & Incident Response",
+        icon: <LineChart className="h-4 w-4" />,
+        skills: ["OpenTelemetry", "Prometheus", "Grafana", "Coralogix", "Honeycomb", "Refinery", "DataDog", "CloudWatch", "incident.io", "PagerDuty"],
+    },
+    {
+        title: "CI/CD",
+        icon: <GitBranch className="h-4 w-4" />,
+        skills: ["Git", "Jenkins", "GitLab CI", "CircleCI", "Argo Workflows", "Snyk"],
+    },
+    {
+        title: "Backend Development",
+        icon: <Server className="h-4 w-4" />,
+        skills: ["Go", "Java", "Spring Boot", "Node.js", "Python"],
+    },
+    {
+        title: "Frontend Development",
+        icon: <Code className="h-4 w-4" />,
+        skills: ["React", "TypeScript", "JavaScript", "Next.js", "TailwindCSS", "HTML/CSS", "Figma"],
+    },
+    {
+        title: "Databases",
+        icon: <Database className="h-4 w-4" />,
+        skills: ["PostgreSQL", "MongoDB", "Redis", "SQL"],
+    },
+];
+
+function SkillCategory({ title, icon, skills }: SkillCategory) {
     return (
-        <div className="flex flex-col gap-4 p-5 sm:p-6 rounded-xl border bg-card">
-            <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10 text-primary" aria-hidden="true">
-                    {icon}
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold">{title}</h3>
-            </div>
-            <ul className="flex flex-wrap gap-1.5 sm:gap-2">
+        <div className="border-t pt-5">
+            <h3 className="flex items-center gap-2.5 text-sm font-semibold mb-4">
+                <span className="text-primary" aria-hidden="true">{icon}</span>
+                {title}
+            </h3>
+            <ul className="flex flex-wrap gap-1.5">
                 {skills.map((skill) => (
-                    <li key={skill}>
-                        <Badge variant="secondary" className="text-xs">
-                            {skill}
-                        </Badge>
+                    <li
+                        key={skill}
+                        className="rounded-md bg-muted/60 px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    >
+                        {skill}
                     </li>
                 ))}
             </ul>
@@ -38,54 +70,19 @@ function SkillCategory({ title, icon, skills }: SkillCategoryProps) {
     );
 }
 
-const CATEGORIES: SkillCategoryProps[] = [
-    {
-        title: "Frontend Development",
-        icon: <Code className="h-5 w-5" />,
-        skills: ["React", "TypeScript", "JavaScript", "Next.js", "TailwindCSS", "HTML/CSS", "Figma"],
-    },
-    {
-        title: "Backend Development",
-        icon: <Server className="h-5 w-5" />,
-        skills: ["Go", "Java", "Spring Boot", "Node.js", "Python"],
-    },
-    {
-        title: "CI/CD",
-        icon: <GitBranch className="h-5 w-5" />,
-        skills: ["Git", "Jenkins", "GitLab CI", "CircleCI", "Argo Workflows", "Snyk"],
-    },
-    {
-        title: "Cloud",
-        icon: <CloudCog className="h-5 w-5" />,
-        skills: ["AWS", "EKS", "Kubernetes", "Helm", "Terraform", "Docker", "Argo CD", "GitOps", "Istio", "GCP"],
-    },
-    {
-        title: "Databases",
-        icon: <Database className="h-5 w-5" />,
-        skills: ["PostgreSQL", "MongoDB", "Redis", "SQL"],
-    },
-    {
-        title: "Observability & Incident Response",
-        icon: <LineChart className="h-5 w-5" />,
-        skills: ["OpenTelemetry", "Prometheus", "Grafana", "Coralogix", "Honeycomb", "Refinery", "DataDog", "CloudWatch", "incident.io", "PagerDuty"],
-    },
-];
-
 export function Skills() {
     return (
-        <section id="skills" className="w-full py-16 sm:py-20 bg-muted/20 scroll-mt-16">
+        <section id="skills" className="w-full py-20 sm:py-28 bg-muted/20 scroll-mt-16">
             <div className="container">
-                <div className="mb-10 sm:mb-16">
-                    <Badge variant="outline" className="mb-4">Expertise</Badge>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-                        Skills &amp; Technologies
-                    </h2>
-                    <p className="text-muted-foreground max-w-2xl">
-                        A comprehensive overview of my technical abilities and experience with various tools and technologies.
-                    </p>
-                </div>
+                <SectionHeader
+                    label="Expertise"
+                    title="Skills & Technologies"
+                    description="The tooling I work with day to day, weighted towards infrastructure, delivery and observability."
+                />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {/* Rules and space rather than six bordered cards, which turned a
+                    list of tags into a grid of boxes. */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-9">
                     {CATEGORIES.map((category) => (
                         <SkillCategory key={category.title} {...category} />
                     ))}
