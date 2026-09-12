@@ -20,9 +20,19 @@
 # production
 /build
 
+# editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.key
+*.p12
+*.pfx
 
 # debug
 npm-debug.log*
@@ -35,6 +45,12 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# service account keys - Firebase CI auth belongs in GitHub secrets,
+# never in the repo
+*serviceaccount*.json
+*-firebase-adminsdk-*.json
+gcp-key.json
 
 # typescript
 *.tsbuildinfo
