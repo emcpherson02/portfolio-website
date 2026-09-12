@@ -1,8 +1,8 @@
 import { type TimelineEvent } from "@/components/resume/InteractiveTimeline";
 
 export const summary = [
-    "Platform engineer at Proofpoint, on the team that owns the Kubernetes clusters, AWS infrastructure and observability for an entire business unit. Works in production daily, primarily in Terraform, and is one of two engineers in the unit with AWS administrative access.",
-    "Recent work includes the unit's EKS migration and its move from Coralogix SaaS to a self-hosted deployment. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7 where he cut AWS spend by 18% and introduced a vulnerability remediation workflow.",
+    "Platform Engineer at Proofpoint, responsible for the Kubernetes clusters, AWS infrastructure, and observability underpinning a full business unit, with daily, Terraform-driven work in production.",
+    "Recent work includes the unit's EKS migration and its move from Coralogix SaaS to a self-hosted deployment. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7.",
 ];
 
 // `year` is the year an entry is filed under in the timeline: the start year

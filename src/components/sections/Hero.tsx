@@ -26,9 +26,9 @@ export function Hero() {
                         </div>
 
                         <p className="text-muted-foreground max-w-md text-lg">
-                            I work on the platform side of software: Kubernetes, delivery
-                            pipelines and observability, building infrastructure that teams
-                            can ship on safely.
+                            I build and operate the infrastructure other engineers build on
+                            top of: Kubernetes clusters, Terraform-managed cloud, and the
+                            observability that catches problems before anyone else notices.
                         </p>
 
                         <div className="flex flex-wrap gap-4 pt-2">
