@@ -56,14 +56,13 @@ function SkillCategory({ title, icon, skills }: SkillCategory) {
                 <span className="text-primary" aria-hidden="true">{icon}</span>
                 {title}
             </h3>
-            {/* Light chips on a tinted section ground. The inverse - white
-                chips on a near-white section - left nothing between them, and
-                muted text on a muted fill was illegible at this size. */}
+            {/* Tinted fill against a white page. Full foreground text, not
+                muted-on-muted, which was illegible at this size. */}
             <ul className="flex flex-wrap gap-1.5">
                 {skills.map((skill) => (
                     <li
                         key={skill}
-                        className="rounded-md border border-border/70 bg-background px-2.5 py-1 font-mono text-[13px] leading-5 text-foreground shadow-sm transition-colors hover:border-foreground/25"
+                        className="rounded-md border border-border/70 bg-muted px-2.5 py-1 font-mono text-[13px] leading-5 text-foreground transition-colors hover:border-foreground/25 hover:bg-secondary"
                     >
                         {skill}
                     </li>
@@ -75,7 +74,7 @@ function SkillCategory({ title, icon, skills }: SkillCategory) {
 
 export function Skills() {
     return (
-        <section id="skills" className="w-full py-20 sm:py-28 bg-muted/40 scroll-mt-16">
+        <section id="skills" className="w-full py-20 sm:py-28 bg-background scroll-mt-16">
             <div className="container">
                 <SectionHeader label="Expertise" title="Skills & Technologies" />
 
