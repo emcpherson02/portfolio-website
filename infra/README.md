@@ -91,10 +91,47 @@ Then push to `main`, or run the workflow manually.
 
 ## Costs
 
-CloudFront's free tier — 1 TB out and 10M requests a month — is permanent
-rather than 12-month, and a personal portfolio will not approach it. S3 holds
-a few MB, and DNS stays at GoDaddy where it is already paid for. Realistically
-this runs at pennies a month.
+**Free permanently, independent of any free-tier status:**
+
+| Service | Always-free allowance | This site's usage |
+|---|---|---|
+| CloudFront data out | 1 TB/month | a few MB |
+| CloudFront requests | 10M/month | hundreds |
+| CloudFront Functions | 2M invocations/month | one per request |
+| ACM certificates | public certs are free | 1 |
+| CloudFormation | no charge for `AWS::*` types | 2 stacks |
+| IAM | free | 1 role |
+| S3 → CloudFront transfer | free | cache misses only |
+
+**Not free forever:** S3 storage and requests. For a ~5 MB site that is
+fractions of a penny per month — but it is not zero once free-tier allowances
+lapse. Versioning is deliberately disabled so stored bytes cannot creep up.
+
+CloudFront invalidations are free for the first 1,000 paths per month. The
+deploy workflow invalidates `/*`, which bills as a single path.
+
+### Set a zero-spend budget first
+
+Before deploying, create a budget so any charge at all reaches you:
+
+Billing and Cost Management → Budgets → Create budget → **Zero spend budget**
+template → add your email.
+
+The first two budgets are free. This is the safety net: if something is ever
+misconfigured, you hear about it at the first cent rather than at the end of
+the month.
+
+### Free Tier plan, if the account was created on or after 15 July 2025
+
+Newer accounts are on a credit-based Free Tier rather than the old 12-month
+one. The Free Plan ends six months after account creation, or when the signup
+credits are exhausted, whichever comes first — and an expired Free Plan
+account has to be upgraded to a Paid plan to stay active.
+
+That matters for a site that needs to stay reachable. Check the plan and
+remaining credits under Billing and Cost Management → Free Tier, and diarise
+the expiry. Upgrading to a Paid plan does not itself cost anything; it just
+means the sub-penny S3 charges above start landing on a card.
 
 `PriceClass_100` (US/Canada/Europe) is the default. Widen it only if you
 expect traffic from elsewhere.

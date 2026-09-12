@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 // Must match the canonical address the site is served from. The apex redirects
 // here via GoDaddy forwarding, since DNS forbids a CNAME at a zone apex and
 // GoDaddy has no ALIAS record.
-const SITE_URL = "https://www.example.com";
+const SITE_URL = "https://www.elliottmcpherson-portfolio.co.uk";
 const TITLE = "Elliott McPherson | Full-Stack Developer";
 const DESCRIPTION = "Portfolio of Elliott McPherson - software engineer in Belfast, with experience in Java, cloud infrastructure and full-stack web development.";
 

@@ -36,7 +36,11 @@ Resources:
     DeletionPolicy: Retain
     UpdateReplacePolicy: Retain
     Properties:
-      BucketName: !Sub '${DomainName}-site'
+      # Deliberately not derived from the domain. Dots in a bucket name break
+      # virtual-hosted-style TLS - the *.s3.region.amazonaws.com wildcard does
+      # not match a multi-label name - which is how CloudFront reaches an OAC
+      # origin. Account id keeps it globally unique.
+      BucketName: !Sub '${AWS::StackName}-${AWS::AccountId}'
       # No WebsiteConfiguration: that requires a public bucket and is
       # incompatible with OAC. Directory indexes are handled by the
       # CloudFront Function below instead.
@@ -49,13 +53,15 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-      VersioningConfiguration:
-        Status: Enabled
+      # Versioning is deliberately off. Git is the source of truth for this
+      # site, and retained object versions are the one thing here that would
+      # quietly grow storage - and therefore cost - over time.
       LifecycleConfiguration:
         Rules:
-          - Id: ExpireOldVersions
+          - Id: AbortIncompleteUploads
             Status: Enabled
-            NoncurrentVersionExpirationInDays: 30
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
 
   SiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
