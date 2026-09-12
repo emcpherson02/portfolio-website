@@ -1,14 +1,25 @@
 import { type TimelineEvent } from "@/components/resume/InteractiveTimeline";
 
 export const summary = [
-    "Final-year Software Engineering student at Queen's University Belfast with hands-on experience at Rapid7. Strong background in backend Java development, secure cloud infrastructure, and technical expertise in low-level fault analysis for on-premises applications.",
-    "Successfully deployed production-grade SaaS applications using Kubernetes and Spinnaker. Known for improving system performance, reducing AWS costs, and implementing security-first processes.",
+    "Software engineer on the platform engineering team at Proofpoint, working on the infrastructure and delivery tooling behind their security products. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7.",
+    "Experienced in backend Java development, Kubernetes, and secure cloud infrastructure. Has deployed production SaaS with Kubernetes and Spinnaker, reduced AWS spend through resource analysis, and introduced security-first processes to a delivery team.",
 ];
 
 // `start` drives ordering. Deriving it from the date string put the Rapid7
 // internship below three 2025 projects, because the parser took the last year
 // in the range.
 export const events: TimelineEvent[] = [
+    {
+        id: 'job-proofpoint',
+        title: 'Software Engineer',
+        organization: 'Proofpoint, Platform Engineering',
+        date: 'Jul 2025 – Present',
+        start: 2025,
+        category: 'work',
+        description: [
+            'Platform engineering for a cybersecurity product suite, covering infrastructure, delivery tooling and observability.',
+        ]
+    },
     {
         id: 'job-rapid7',
         title: 'Software Engineering Intern',
@@ -32,11 +43,11 @@ export const events: TimelineEvent[] = [
         id: 'education-qub',
         title: 'BEng Software Engineering',
         organization: "Queen's University Belfast",
-        date: 'Sep 2021 – Jun 2025',
+        date: 'Sep 2021 – Jul 2025',
         start: 2021,
         category: 'education',
         description: [
-            'Predicted: 2:1',
+            'Awarded 2:1 (Hons)',
             'Key Modules: Cloud Computing (81%), Professional Skills (82%), Artificial Intelligence (67%)'
         ]
     },
@@ -95,10 +106,11 @@ export const events: TimelineEvent[] = [
 ];
 
 export const technicalSkills = [
-    'Java', 'Python', 'JavaScript/TypeScript', 'React', 'Node.js',
-    'Spring Boot', 'AWS', 'GCP', 'Kubernetes', 'Docker',
-    'CI/CD', 'REST APIs', 'MongoDB', 'PostgreSQL',
-    'Git', 'Terraform', 'Spinnaker', 'Microservices'
+    'Go', 'Java', 'Python', 'JavaScript/TypeScript', 'Spring Boot',
+    'Kubernetes', 'Helm', 'Istio', 'Docker', 'Terraform', 'GitOps',
+    'Argo CD', 'Argo Workflows', 'CircleCI', 'Jenkins',
+    'AWS', 'GCP', 'OpenTelemetry', 'Prometheus', 'Grafana',
+    'PostgreSQL', 'MongoDB', 'Redis', 'Microservices'
 ];
 
 export const softSkills = [

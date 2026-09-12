@@ -47,27 +47,27 @@ const CATEGORIES: SkillCategoryProps[] = [
     {
         title: "Backend Development",
         icon: <Server className="h-5 w-5" />,
-        skills: ["Java", "Spring Boot", "Node.js", "Python"],
+        skills: ["Go", "Java", "Spring Boot", "Node.js", "Python"],
     },
     {
         title: "CI/CD",
         icon: <GitBranch className="h-5 w-5" />,
-        skills: ["Git", "Jenkins", "GitLab CI", "CircleCI", "Argo Workflows"],
+        skills: ["Git", "Jenkins", "GitLab CI", "CircleCI", "Argo Workflows", "Snyk"],
     },
     {
         title: "Cloud",
         icon: <CloudCog className="h-5 w-5" />,
-        skills: ["AWS", "GCP", "Kubernetes", "Terraform", "Docker", "Argo CD", "GitOps", "Istio"],
+        skills: ["AWS", "GCP", "Kubernetes", "Helm", "Terraform", "Docker", "Argo CD", "GitOps", "Istio"],
     },
     {
         title: "Databases",
         icon: <Database className="h-5 w-5" />,
-        skills: ["MongoDB", "SQL"],
+        skills: ["PostgreSQL", "MongoDB", "Redis", "SQL"],
     },
     {
-        title: "Monitoring & Security",
+        title: "Observability",
         icon: <LineChart className="h-5 w-5" />,
-        skills: ["Snyk", "Wireshark", "DataDog", "Coralogix", "Honeycomb", "Grafana", "OpenTelemetry", "Prometheus"],
+        skills: ["OpenTelemetry", "Prometheus", "Grafana", "Honeycomb", "Coralogix", "DataDog", "Wireshark"],
     },
 ];
 

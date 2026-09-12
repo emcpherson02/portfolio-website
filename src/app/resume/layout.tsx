@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 // pointed at the homepage and told search engines the CV was a duplicate of it.
 
 const TITLE = "Resume | Elliott McPherson";
-const DESCRIPTION = "The experience, education and projects of Elliott McPherson - software engineer in Belfast, previously at Rapid7.";
+const DESCRIPTION = "The experience, education and projects of Elliott McPherson - platform engineer at Proofpoint in Belfast, previously at Rapid7.";
 
 export const metadata: Metadata = {
     title: TITLE,

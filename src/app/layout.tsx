@@ -28,8 +28,8 @@ export const viewport: Viewport = {
 // Canonical address. Firebase serves the apex directly from an A record, so
 // there is no www hop to redirect through.
 const SITE_URL = "https://elliottmcpherson-portfolio.co.uk";
-const TITLE = "Elliott McPherson | Full-Stack Developer";
-const DESCRIPTION = "Portfolio of Elliott McPherson - software engineer in Belfast, with experience in Java, cloud infrastructure and full-stack web development.";
+const TITLE = "Elliott McPherson | Software Engineer";
+const DESCRIPTION = "Portfolio of Elliott McPherson - software engineer in Belfast working in platform engineering at Proofpoint, with experience in Kubernetes, cloud infrastructure and observability.";
 
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),

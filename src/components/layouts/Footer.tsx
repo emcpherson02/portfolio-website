@@ -17,7 +17,7 @@ export function Footer() {
                             <span>Elliott McPherson</span>
                         </Link>
                         <p className="text-sm text-muted-foreground mt-4 max-w-xs">
-                            Full-stack developer specialising in modern web technologies and creating exceptional digital experiences.
+                            Software engineer in Belfast, working in platform engineering at Proofpoint.
                         </p>
                     </div>
 

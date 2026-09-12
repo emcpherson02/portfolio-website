@@ -26,8 +26,9 @@ export function Hero() {
                         </div>
 
                         <p className="text-muted-foreground max-w-md text-lg">
-                            I build accessible, responsive, and performant software solutions
-                            with a focus on efficient cloud deployment and exceptional user experience.
+                            I work on the platform side of software: Kubernetes, delivery
+                            pipelines and observability, building infrastructure that teams
+                            can ship on safely.
                         </p>
 
                         <div className="flex flex-wrap gap-4 pt-2">
