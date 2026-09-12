@@ -66,9 +66,13 @@ bad=$(grep -rhoE 'href="/[^"#?]*"' "$OUT" --include='*.html' 2>/dev/null \
 [ -z "$bad" ] && check pass "internal links all have trailing slashes" \
     || check fail "links missing trailing slash: $(echo "$bad" | tr '\n' ' ')"
 
-# Static assets referenced by the page must have been copied.
-[ -f "$OUT/CV_Elliott_McPherson.pdf" ] && check pass "CV PDF copied" \
-    || check fail "CV PDF missing from export"
+# Static assets referenced by the page must have been copied. Project images
+# fall back to a placeholder at runtime rather than erroring, so a missing one
+# is invisible without this.
+for asset in "CV_Elliott_McPherson.pdf" "projects/studentwallet.png" "projects/portfolio-website.png"; do
+    [ -f "$OUT/$asset" ] && check pass "$asset copied" \
+        || check fail "$asset missing from export"
+done
 
 echo
 [ "$fail" -eq 0 ] && echo "Export OK" || echo "Export has failures"
