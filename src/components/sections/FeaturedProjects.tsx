@@ -23,7 +23,7 @@ const PROJECTS: Project[] = [
     {
         title: "StudentWallet",
         description: "StudentWallet is a comprehensive financial management system designed specifically for university students. It allows students to track their spending, manage budgets, monitor their maintenance loan, and integrate their bank accounts via Plaid.",
-        imageSrc: "/projects/studentwallet.jpg",
+        imageSrc: "/projects/studentwallet.png",
         imageAlt: "The StudentWallet sign-up screen, with fields for name, date of birth and email address.",
         tags: ["React.js", "Express.js", "CSS/HTML", "Node.js", "docker-compose", "GCP CloudRun", "Firestore", "Plaid API"],
         liveUrl: "https://studentwallet-4e2ca.web.app",
@@ -64,8 +64,12 @@ function ProjectImage({ src, alt, title }: { src: string; alt: string; title: st
                 alt={alt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                // contain, not cover: screenshots vary in aspect and cover would
+                // crop them - losing the form fields off one and the terminal
+                // off the other. Letterboxing against the card ground is the
+                // lesser cost when the whole point is seeing the screen.
                 className={cn(
-                    "object-cover transition-all duration-500 group-hover:scale-[1.03]",
+                    "object-contain transition-all duration-500 group-hover:scale-[1.02]",
                     status === 'loaded' ? "opacity-100" : "opacity-0"
                 )}
                 onLoad={() => setStatus('loaded')}
