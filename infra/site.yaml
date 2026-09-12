@@ -1,0 +1,197 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Static site hosting for the portfolio: private S3 bucket, CloudFront with
+  Origin Access Control, an ACM certificate, and a CloudFront Function that
+  resolves directory paths to index.html.
+
+  MUST be deployed in us-east-1 - CloudFront only accepts ACM certificates
+  from that region.
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: Apex domain, e.g. elliottmcpherson.com
+    AllowedPattern: '^[a-z0-9.-]+\.[a-z]{2,}$'
+
+  IncludeWww:
+    Type: String
+    Description: Also serve www.<DomainName>
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+
+  PriceClass:
+    Type: String
+    Description: PriceClass_100 is US/Canada/Europe only and the cheapest.
+    Default: PriceClass_100
+    AllowedValues: [PriceClass_100, PriceClass_200, PriceClass_All]
+
+Conditions:
+  WithWww: !Equals [!Ref IncludeWww, 'true']
+
+Resources:
+
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    # Retained so a stack delete cannot take the site content with it.
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub '${DomainName}-site'
+      # No WebsiteConfiguration: that requires a public bucket and is
+      # incompatible with OAC. Directory indexes are handled by the
+      # CloudFront Function below instead.
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireOldVersions
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontRead
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${SiteBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                # Scopes access to this distribution specifically, rather than
+                # to CloudFront as a service.
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}'
+
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames: !If
+        - WithWww
+        - [!Sub 'www.${DomainName}']
+        - !Ref AWS::NoValue
+      # DNS validation, but with DNS at GoDaddy rather than Route 53 there is
+      # no hosted zone for ACM to write to. The stack will sit at
+      # CREATE_IN_PROGRESS on this resource until the CNAME records shown in
+      # the ACM console are added by hand. That wait is expected, not a hang.
+      ValidationMethod: DNS
+
+  # CloudFront's DefaultRootObject only applies to "/". With an S3 REST origin,
+  # "/resume/" maps to the key "resume/", which does not exist, and 403s. This
+  # rewrites directory paths onto their index.html.
+  IndexRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-index-rewrite'
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Resolve directory paths to index.html
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+
+            if (uri.endsWith('/')) {
+                request.uri = uri + 'index.html';
+            } else if (!uri.split('/').pop().includes('.')) {
+                request.uri = uri + '/index.html';
+            }
+
+            return request;
+        }
+
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${AWS::StackName}-oac'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub 'Portfolio site for ${DomainName}'
+        DefaultRootObject: index.html
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: !Ref PriceClass
+        Aliases: !If
+          - WithWww
+          - [!Ref DomainName, !Sub 'www.${DomainName}']
+          - [!Ref DomainName]
+        ViewerCertificate:
+          AcmCertificateArn: !Ref Certificate
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        Origins:
+          - Id: SiteOrigin
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        DefaultCacheBehavior:
+          TargetOriginId: SiteOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          AllowedMethods: [GET, HEAD, OPTIONS]
+          CachedMethods: [GET, HEAD]
+          # CachingOptimized (AWS managed)
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          # SecurityHeadersPolicy (AWS managed)
+          ResponseHeadersPolicyId: 67f7725c-6f97-4210-82d7-5512b31e9d03
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt IndexRewriteFunction.FunctionMetadata.FunctionARN
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 60
+          - ErrorCode: 404
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+            ErrorCachingMinTTL: 60
+
+Outputs:
+  BucketName:
+    Description: Sync the contents of out/ here
+    Value: !Ref SiteBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-bucket'
+
+  BucketArn:
+    Value: !GetAtt SiteBucket.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-bucket-arn'
+
+  DistributionId:
+    Description: Needed to create invalidations
+    Value: !Ref Distribution
+    Export:
+      Name: !Sub '${AWS::StackName}-distribution-id'
+
+  DistributionDomainName:
+    Description: Point your DNS CNAME/ALIAS at this
+    Value: !GetAtt Distribution.DomainName
+
+  CertificateArn:
+    Value: !Ref Certificate

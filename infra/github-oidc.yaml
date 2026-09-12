@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  IAM role that GitHub Actions assumes via OIDC to deploy the site. No access
+  keys are created or stored anywhere; GitHub presents a short-lived token and
+  AWS exchanges it for temporary credentials.
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Default: emcpherson02
+
+  GitHubRepo:
+    Type: String
+    Default: portfolio-website
+
+  DeployBranch:
+    Type: String
+    Description: Only this branch may assume the role.
+    Default: main
+
+  SiteStackName:
+    Type: String
+    Description: Name of the site stack, to import its bucket and distribution.
+    Default: portfolio-site
+
+  CreateOidcProvider:
+    Type: String
+    Description: Set false if this account already has the GitHub OIDC provider.
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+
+Conditions:
+  NeedsProvider: !Equals [!Ref CreateOidcProvider, 'true']
+
+Resources:
+
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: NeedsProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      # AWS now validates GitHub's certificate against its own trust store, so
+      # this list is no longer security-critical, but the field is required.
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${GitHubRepo}-deploy'
+      Description: Assumed by GitHub Actions to deploy the portfolio site.
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - NeedsProvider
+                - !Ref GitHubOidcProvider
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              # Scoped to one branch of one repo. Without the `sub` condition
+              # any repo on GitHub could assume this role.
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub 'repo:${GitHubOrg}/${GitHubRepo}:ref:refs/heads/${DeployBranch}'
+      Policies:
+        - PolicyName: DeploySite
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: ListBucket
+                Effect: Allow
+                Action: s3:ListBucket
+                Resource:
+                  Fn::ImportValue: !Sub '${SiteStackName}-bucket-arn'
+
+              - Sid: WriteObjects
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub
+                  - '${BucketArn}/*'
+                  - BucketArn:
+                      Fn::ImportValue: !Sub '${SiteStackName}-bucket-arn'
+
+              - Sid: Invalidate
+                Effect: Allow
+                Action: cloudfront:CreateInvalidation
+                Resource: !Sub
+                  - 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${DistId}'
+                  - DistId:
+                      Fn::ImportValue: !Sub '${SiteStackName}-distribution-id'
+
+Outputs:
+  RoleArn:
+    Description: Set as the AWS_DEPLOY_ROLE repository variable in GitHub
+    Value: !GetAtt DeployRole.Arn
