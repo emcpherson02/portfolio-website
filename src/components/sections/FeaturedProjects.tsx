@@ -24,7 +24,7 @@ const PROJECTS: Project[] = [
         title: "StudentWallet",
         description: "StudentWallet is a comprehensive financial management system designed specifically for university students. It allows students to track their spending, manage budgets, monitor their maintenance loan, and integrate their bank accounts via Plaid.",
         imageSrc: "/projects/studentwallet.jpg",
-        imageAlt: "The StudentWallet dashboard, showing budget categories and recent transactions.",
+        imageAlt: "The StudentWallet sign-up screen, with fields for name, date of birth and email address.",
         tags: ["React.js", "Express.js", "CSS/HTML", "Node.js", "docker-compose", "GCP CloudRun", "Firestore", "Plaid API"],
         liveUrl: "https://studentwallet-4e2ca.web.app",
         githubUrl: "https://github.com/emcpherson02/StudentWallet",
