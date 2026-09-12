@@ -55,7 +55,7 @@ export function Contact() {
                                 </div>
                                 <div>
                                     <h4 className="font-medium">Work Status</h4>
-                                    <p className="text-muted-foreground">Open to full-time opportunities and freelance projects</p>
+                                    <p className="text-muted-foreground">Full-time Software Engineer</p>
                                 </div>
                             </div>
                         </div>

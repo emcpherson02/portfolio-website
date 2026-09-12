@@ -10,11 +10,13 @@ export interface TimelineEvent {
     organization: string;
     /** Display string, e.g. "Jun 2023 – Jun 2024". Not parsed. */
     date: string;
-    /** Year the entry began. Drives grouping and ordering. */
-    start: number;
+    /**
+     * Year this entry is filed under: the start year for a role, the year
+     * completed for a qualification. Drives grouping and ordering.
+     */
+    year: number;
     category: 'education' | 'work' | 'project';
     description: string[];
-    technologies?: string[];
     icon?: React.ReactNode;
 }
 
@@ -42,7 +44,7 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
 
     const eventsByYear = events.reduce<Record<number, TimelineEvent[]>>((acc, event) => {
-        (acc[event.start] ??= []).push(event);
+        (acc[event.year] ??= []).push(event);
         return acc;
     }, {});
 
@@ -100,19 +102,6 @@ export function InteractiveTimeline({ events, className }: InteractiveTimelinePr
                                         </h3>
 
                                         <p className="text-sm text-muted-foreground mt-2">{event.organization}</p>
-
-                                        {event.technologies && (
-                                            <ul className="flex flex-wrap gap-1.5 mt-2">
-                                                {event.technologies.map((tech) => (
-                                                    <li
-                                                        key={tech}
-                                                        className="text-xs bg-muted text-muted-foreground rounded px-1.5 py-0.5"
-                                                    >
-                                                        {tech}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
 
                                         {/* Always rendered, so the detail of each role is present
                                             in the exported HTML for crawlers and link previews.

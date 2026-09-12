@@ -92,9 +92,9 @@ export default function ResumePage() {
                 </div>
 
                 <section className="mt-12 bg-primary/5 rounded-xl p-8 border shadow-sm text-center">
-                    <h2 className="text-2xl font-bold mb-4">Looking for a Skilled Developer?</h2>
+                    <h2 className="text-2xl font-bold mb-4">Looking for a Skilled Engineer?</h2>
                     <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-                        I&#39;m currently open to new opportunities in software development. If you&#39;re looking for a passionate developer with hands-on experience, let&#39;s connect!
+                        If you&#39;re looking for a passionate engineer with hands-on experience, let&#39;s connect!
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                         <Button asChild size="lg" className="shadow-md">
