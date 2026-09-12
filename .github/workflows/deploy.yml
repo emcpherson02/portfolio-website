@@ -5,6 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Least privilege. This job only reads the repo and authenticates to Firebase
+# through the service-account secret; it needs no write access to GitHub.
+permissions:
+  contents: read
+
 concurrency:
   group: deploy
   cancel-in-progress: false
@@ -30,9 +35,11 @@ jobs:
       - name: Build and verify export
         run: npm run verify
 
+      # Secret name matches what `firebase init hosting:github` generates:
+      # FIREBASE_SERVICE_ACCOUNT_<PROJECT ID, uppercased, hyphens to underscores>
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ELMCP_PORTFOLIO_WEBSITE }}
           channelId: live
-          projectId: ${{ vars.FIREBASE_PROJECT_ID }}
+          projectId: elmcp-portfolio-website
