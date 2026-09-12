@@ -1,7 +1,7 @@
 # Portfolio
 
 Personal portfolio and CV for Elliott McPherson. Next.js App Router, exported
-as a static site and served from S3 behind CloudFront.
+as a static site and served from Firebase Hosting.
 
 **Live:** not currently deployed.
 
@@ -39,8 +39,8 @@ deployed. Two real examples, both of which shipped in this repo:
 
 `scripts/verify-export.sh` asserts against the built output: nothing ships at
 `opacity: 0`, the CV exists as text (including inside collapsed timeline
-panels), internal links carry the trailing slashes a CloudFront/S3 origin
-needs, and the PDF was copied. **Run `npm run verify` before deploying.**
+panels), internal links carry trailing slashes so they hit the exported files
+directly, and the PDF was copied. **Run `npm run verify` before deploying.**
 
 ## Architecture
 
@@ -73,11 +73,52 @@ load-bearing anyway — see the comment there before removing it.
 
 ## Deployment
 
-Static export to S3 + CloudFront with Origin Access Control, fronted by a
-GoDaddy domain, deployed by GitHub Actions using OIDC role assumption rather
-than stored AWS keys.
+Static export to Firebase Hosting, on a domain registered with GoDaddy.
+Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, builds,
+runs the export checks above, and deploys only if they pass.
 
-Note that CloudFront's Default Root Object only covers `/`. With an S3 REST
-origin, `/resume/` maps to a key that does not exist and 403s, so the
-distribution needs a CloudFront Function to append `index.html` to directory
-paths.
+### First-time setup
+
+```bash
+npm i -g firebase-tools
+firebase login
+firebase projects:create          # or use an existing project
+```
+
+Put the project id in `.firebaserc`, replacing the placeholder. Then deploy by
+hand once to confirm it works:
+
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+### Custom domain
+
+Firebase console → Hosting → Add custom domain. It issues a TXT record for
+ownership, then A records for the domain itself.
+
+In GoDaddy's DNS manager, add the TXT record first, then the A records once
+Firebase shows them. Remove any parked-page A records GoDaddy created at
+signup, or certificate provisioning will not complete. SSL is issued
+automatically and usually lands within a few hours.
+
+Unlike a CNAME-based CDN, Firebase serves the apex directly from A records, so
+`elliottmcpherson-portfolio.co.uk` works without a redirect to `www`.
+
+### CI credentials
+
+```bash
+firebase init hosting:github
+```
+
+That creates a service account and writes `FIREBASE_SERVICE_ACCOUNT` into the
+repository secrets. Also add a repository **variable** `FIREBASE_PROJECT_ID`
+with the project id.
+
+### Cost
+
+The Spark plan is free with no time limit: 10 GB stored, 360 MB/day
+transferred — roughly 900 full page loads a day for this site. Exceeding a
+quota pauses serving until the next window rather than generating a bill, and
+no card is required.

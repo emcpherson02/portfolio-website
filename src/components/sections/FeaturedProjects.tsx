@@ -34,7 +34,7 @@ const PROJECTS: Project[] = [
         description: "A portfolio website built to improve my TypeScript and frontend development skills, designed to highlight my projects and demonstrate my employability.",
         imageSrc: "/projects/portfolio-website.png",
         imageAlt: "The landing page of this portfolio site, showing the hero section and interactive terminal.",
-        tags: ["React", "TypeScript", "Next.js", "shadcn/ui", "TailwindCSS", "AWS S3", "AWS CloudFront"],
+        tags: ["React", "TypeScript", "Next.js", "shadcn/ui", "TailwindCSS", "Firebase Hosting", "GitHub Actions"],
         githubUrl: "https://github.com/emcpherson02/portfolio-website",
         reverse: true,
     },

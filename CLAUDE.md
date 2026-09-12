@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal portfolio and CV for Elliott McPherson: Next.js 16 (App Router), React 19, TypeScript, Tailwind 4, exported as a **static site** (`output: 'export'`). Its purpose is to demonstrate employability, so correctness and polish are the product rather than incidental.
 
-The site is **not currently deployed**. The original AWS account was deleted, taking the Amplify deployment and the CloudFront image origin with it. Target is S3 + CloudFront with OAC, behind a GoDaddy domain, deployed by GitHub Actions via OIDC.
+The site is **not currently deployed**. The original AWS account was deleted, taking the Amplify deployment and the CloudFront image origin with it. Target is **Firebase Hosting** (Spark plan) on `elliottmcpherson-portfolio.co.uk`, a GoDaddy-registered domain, deployed by GitHub Actions on push to `main`.
+
+An S3 + CloudFront setup was built and then removed in favour of Firebase. The deciding factor was not technical: AWS accounts created on or after 15 July 2025 are on a credit-based Free Tier whose Free Plan lapses after six months, which is a recurring obligation for a site that should be set-and-forget. Firebase's Spark plan has no expiry, needs no card, and serves the apex domain from A records rather than forcing a `www` redirect. The AWS templates are in git history if that trade ever needs revisiting.
 
 ## Commands
 

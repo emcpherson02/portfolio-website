@@ -50,8 +50,9 @@ for page in "index.html" "resume/index.html"; do
     fi
 done
 
-# CloudFront -> S3 REST origin 404s on a missing trailing slash, so internal
-# links must end in / (or point at a file with an extension).
+# The export emits dir/index.html, so internal links should end in / to hit the
+# file directly. Firebase redirects to add a missing slash rather than 404ing,
+# so this is about avoiding a pointless round trip, not correctness.
 bad=$(grep -rhoE 'href="/[^"#?]*"' "$OUT" --include='*.html' 2>/dev/null \
     | sort -u | grep -vE '/"$' | grep -vE '\.[a-zA-Z0-9]+"$' || true)
 [ -z "$bad" ] && check pass "internal links all have trailing slashes" \
