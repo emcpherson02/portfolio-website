@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "tsc --noEmit && next build",
-    "preview": "npm run build && npx --yes serve out --no-clean-urls -l 3001",
+    "preview": "npm run build && npx --yes serve out -l 3001",
     "check:export": "bash scripts/verify-export.sh",
     "check:a11y": "npx --yes @axe-core/cli http://localhost:3001/ http://localhost:3001/resume/ --exit",
     "verify": "npm run build && npm run check:export",

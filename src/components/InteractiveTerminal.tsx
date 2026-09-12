@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+const TYPE_SPEED_MS = 30;
+
 interface TypeWriterProps {
     text: string;
     speed?: number;
@@ -14,61 +16,45 @@ interface TypeWriterProps {
 
 function TypeWriter({
                         text,
-                        speed = 30,
+                        speed = TYPE_SPEED_MS,
                         className = "",
                         delay = 0,
-                        onComplete = () => {}
+                        onComplete
                     }: TypeWriterProps) {
     const [displayText, setDisplayText] = useState('');
-    const [isStarted, setIsStarted] = useState(false);
-    const charIndex = useRef(0);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Held in a ref so a caller passing an inline arrow does not restart the
+    // typing run on every parent render.
+    const onCompleteRef = useRef(onComplete);
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    });
 
     useEffect(() => {
-        // Reset state when text changes
-        setDisplayText('');
-        charIndex.current = 0;
-        setIsStarted(false);
+        let index = 0;
+        let typeTimer: ReturnType<typeof setTimeout>;
 
-        // Clear any existing timer
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-        }
+        const typeNext = () => {
+            index += 1;
+            setDisplayText(text.slice(0, index));
 
-        // Start typing after the delay
-        const startTimeout = setTimeout(() => {
-            setIsStarted(true);
+            if (index < text.length) {
+                typeTimer = setTimeout(typeNext, speed);
+            } else {
+                onCompleteRef.current?.();
+            }
+        };
+
+        const startTimer = setTimeout(() => {
+            setDisplayText('');
+            typeNext();
         }, delay);
 
-        return () => clearTimeout(startTimeout);
-    }, [text, delay]);
-
-    useEffect(() => {
-        if (!isStarted) return;
-
-        // Clear any existing timer to prevent overlap
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-        }
-
-        const typeNextChar = () => {
-            if (charIndex.current < text.length) {
-                setDisplayText(text.slice(0, charIndex.current + 1));
-                charIndex.current += 1;
-                timerRef.current = setTimeout(typeNextChar, speed);
-            } else {
-                onComplete();
-            }
-        };
-
-        timerRef.current = setTimeout(typeNextChar, speed);
-
         return () => {
-            if (timerRef.current) {
-                clearTimeout(timerRef.current);
-            }
+            clearTimeout(startTimer);
+            clearTimeout(typeTimer);
         };
-    }, [isStarted, text, speed, onComplete]);
+    }, [text, speed, delay]);
 
     return <span className={className}>{displayText}</span>;
 }
@@ -106,14 +92,11 @@ function CodeLine({
                         text={keyText}
                         className={keyColor}
                         delay={delay}
-                        onComplete={() => {
-                            setTimeout(() => {}, 0);
-                        }}
                     />
                     <TypeWriter
                         text={valueText}
                         className={valueColor}
-                        delay={delay + keyText.length * 30} // Adjust delay based on key length
+                        delay={delay + keyText.length * TYPE_SPEED_MS}
                         onComplete={onComplete}
                     />
                 </>
@@ -142,8 +125,20 @@ export function InteractiveTerminal() {
     const [showCurlyBrace, setShowCurlyBrace] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
 
-    // Reset the animation
+    // The sequence schedules nine timers. Without tracking them, Reset cleared
+    // the flags but left the run in flight - lines kept appearing while the Run
+    // button was showing - and unmounting mid-run leaked all nine.
+    const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+    const clearTimers = () => {
+        timers.current.forEach(clearTimeout);
+        timers.current = [];
+    };
+
+    useEffect(() => clearTimers, []);
+
     const resetAnimation = () => {
+        clearTimers();
         setIsRunning(false);
         setShowPrompt(true);
         setShowLoading(false);
@@ -157,22 +152,24 @@ export function InteractiveTerminal() {
         setShowMessage(false);
     };
 
-    // Handle running the animation
     const runAnimation = () => {
         if (isRunning) return;
 
         setIsRunning(true);
 
-        // Start the animation sequence
-        setTimeout(() => setShowLoading(true), 500);
-        setTimeout(() => setShowProfile(true), 1800);
-        setTimeout(() => setShowConstLine(true), 2000);
-        setTimeout(() => setShowName(true), 3300);
-        setTimeout(() => setShowTitle(true), 4300);
-        setTimeout(() => setShowLocation(true), 5300);
-        setTimeout(() => setShowPassion(true), 6300);
-        setTimeout(() => setShowCurlyBrace(true), 8000);
-        setTimeout(() => setShowMessage(true), 9000);
+        const schedule = (fn: () => void, ms: number) => {
+            timers.current.push(setTimeout(fn, ms));
+        };
+
+        schedule(() => setShowLoading(true), 500);
+        schedule(() => setShowProfile(true), 1800);
+        schedule(() => setShowConstLine(true), 2000);
+        schedule(() => setShowName(true), 3300);
+        schedule(() => setShowTitle(true), 4300);
+        schedule(() => setShowLocation(true), 5300);
+        schedule(() => setShowPassion(true), 6300);
+        schedule(() => setShowCurlyBrace(true), 8000);
+        schedule(() => setShowMessage(true), 9000);
     };
 
     return (
@@ -216,10 +213,12 @@ export function InteractiveTerminal() {
                 {showPrompt && (
                     <div className="flex items-start">
                         <span className="text-green-500 mr-2">$</span>
-                        {!isRunning ? (
-                            <span className="typing-animation inline-block">node developer-profile.js</span>
-                        ) : (
-                            <span>node developer-profile.js</span>
+                        <span>node developer-profile.js</span>
+                        {!isRunning && (
+                            <span
+                                className="inline-block w-2 h-4 ml-0.5 bg-green-400 motion-safe:animate-pulse"
+                                aria-hidden="true"
+                            />
                         )}
                     </div>
                 )}

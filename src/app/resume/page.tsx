@@ -2,7 +2,6 @@
 
 import { AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Download, ExternalLink } from "lucide-react";
 import { useCallback, useState } from "react";
 import Link from "next/link";
