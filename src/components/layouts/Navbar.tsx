@@ -123,21 +123,16 @@ export function Navbar({ className }: NavbarProps) {
         >
             <div className="container flex h-16 items-center justify-between gap-4">
                 {/* Monogram rather than the full name, which the hero and the
-                    resume masthead both already carry. */}
+                    resume masthead both already carry. Deliberately uncontained:
+                    a boxed mark reads as a second button next to Resume. */}
                 <Link
                     href="/"
                     aria-label="Elliott McPherson — home"
-                    className="group shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="group shrink-0 rounded-md px-1 -mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                    <span
-                        className={cn(
-                            "flex h-9 w-9 items-center justify-center rounded-lg border font-mono text-sm font-bold tracking-tight",
-                            "border-primary/30 bg-primary/5 text-primary",
-                            "transition-colors duration-200",
-                            "group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary"
-                        )}
-                    >
-                        EM
+                    <span className="text-xl font-bold tracking-tight" aria-hidden="true">
+                        <span className="text-primary">E</span>
+                        <span className="text-foreground transition-colors duration-200 group-hover:text-primary">M</span>
                     </span>
                 </Link>
 
