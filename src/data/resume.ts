@@ -19,11 +19,11 @@ export const events: TimelineEvent[] = [
         category: 'work',
         description: [
             'Own the Kubernetes clusters, AWS infrastructure and observability tooling for an entire business unit.',
-            'One of two engineers holding AWS administrative access for the unit, carrying out production changes on behalf of every other team.',
-            'Built the cluster-level workloads for the unit’s EKS migration, including node-exporter, CrowdStrike Falcon sensors, Honeycomb Refinery and Argo Workflows.',
+            'Hold AWS administrative access for the unit, carrying out production changes on behalf of other teams.',
+            'Built the cluster-level workloads for the unit’s EKS migration, including CrowdStrike Falcon sensors, Honeycomb Refinery, Argo Workflows, Node Exporter and more.',
             'Drove the migration from Coralogix SaaS to a bring-your-own-cloud deployment, as one of two engineers owning the Coralogix vendor relationship.',
-            'Designed and delivered, solo, a Lambda and Slack application routing the unit’s CloudWatch logs to each owning team’s channel — adopted across every team.',
-            'Built Grafana dashboards tracking Istio gateway health, giving the unit live visibility throughout the EKS migration.',
+            'Designed and delivered a Lambda and Slack application routing the unit’s CloudWatch logs to each owning team’s channel — adopted across all teams.',
+            'Built Grafana dashboards including a dashboard for Istio gateway health, giving the unit live visibility throughout the EKS migration.',
             'On call for production systems, running incident response through incident.io and PagerDuty.',
             'Manage the unit’s AWS estate as code in Terraform.'
         ]
