@@ -263,7 +263,7 @@ export function InteractiveTerminal() {
                                 <CodeLine
                                     indent={0}
                                     keyName="title"
-                                    value="'Full-Stack Developer'"
+                                    value="'Software Engineer, Platform Engineering'"
                                 />
                             )}
 

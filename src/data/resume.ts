@@ -1,20 +1,39 @@
 import { type TimelineEvent } from "@/components/resume/InteractiveTimeline";
 
 export const summary = [
-    "Final-year Software Engineering student at Queen's University Belfast with hands-on experience at Rapid7. Strong background in backend Java development, secure cloud infrastructure, and technical expertise in low-level fault analysis for on-premises applications.",
-    "Successfully deployed production-grade SaaS applications using Kubernetes and Spinnaker. Known for improving system performance, reducing AWS costs, and implementing security-first processes.",
+    "Platform Engineer at Proofpoint, responsible for the Kubernetes clusters, AWS infrastructure, and observability underpinning a full business unit, with daily, Terraform-driven work in production.",
+    "Recent work includes the unit's EKS migration and its move from Coralogix SaaS to a self-hosted deployment. BEng Software Engineering from Queen's University Belfast, with a prior internship at Rapid7.",
 ];
 
-// `start` drives ordering. Deriving it from the date string put the Rapid7
-// internship below three 2025 projects, because the parser took the last year
-// in the range.
+// `year` is the year an entry is filed under in the timeline: the start year
+// for a role, the year completed for a qualification. It is explicit because
+// deriving it from the date string filed the degree under 2021 and sorted it
+// below an internship that finished a year earlier.
 export const events: TimelineEvent[] = [
+    {
+        id: 'job-proofpoint',
+        title: 'Software Engineer – Platform Engineering',
+        organization: 'Proofpoint, Belfast',
+        date: 'Aug 2025 – Present',
+        year: 2025,
+        category: 'work',
+        description: [
+            'Own the Kubernetes clusters, AWS infrastructure and observability tooling for an entire business unit.',
+            'Hold AWS administrative access for the unit, carrying out production changes on behalf of other teams.',
+            'Built the cluster-level workloads for the unit’s EKS migration, including CrowdStrike Falcon sensors, Honeycomb Refinery, Argo Workflows, Node Exporter and more.',
+            'Drove the migration from Coralogix SaaS to a bring-your-own-cloud deployment, as one of two engineers owning the Coralogix vendor relationship.',
+            'Designed and delivered a Lambda and Slack application routing the unit’s CloudWatch logs to each owning team’s channel — adopted across all teams.',
+            'Built Grafana dashboards including a dashboard for Istio gateway health, giving the unit live visibility throughout the EKS migration.',
+            'On call for production systems, running incident response through incident.io and PagerDuty.',
+            'Manage the unit’s AWS estate as code in Terraform.'
+        ]
+    },
     {
         id: 'job-rapid7',
         title: 'Software Engineering Intern',
         organization: 'Rapid7, Belfast',
         date: 'Jun 2023 – Jun 2024',
-        start: 2023,
+        year: 2023,
         category: 'work',
         description: [
             'Deployed a SaaS platform into production using Kubernetes and Spinnaker, contributing to customer-facing delivery.',
@@ -32,53 +51,12 @@ export const events: TimelineEvent[] = [
         id: 'education-qub',
         title: 'BEng Software Engineering',
         organization: "Queen's University Belfast",
-        date: 'Sep 2021 – Jun 2025',
-        start: 2021,
+        date: 'Graduated Jul 2025',
+        year: 2025,
         category: 'education',
         description: [
-            'Predicted: 2:1',
+            'Awarded 2:1 (Hons)',
             'Key Modules: Cloud Computing (81%), Professional Skills (82%), Artificial Intelligence (67%)'
-        ]
-    },
-    {
-        id: 'project-studentwallet',
-        title: 'StudentWallet – FinTech Web Application',
-        organization: 'Personal project',
-        date: '2025',
-        start: 2025,
-        category: 'project',
-        technologies: ['React', 'Node.js', 'Firebase', 'Plaid API', 'GCP'],
-        description: [
-            'Built a full-stack budgeting platform with secure bank connectivity via Plaid.',
-            'Deployed on Google Cloud Run with intelligent autoscaling and load balancing.',
-            'Created a comprehensive system for maintenance loan tracking, custom budgeting, and personalized financial advice.'
-        ]
-    },
-    {
-        id: 'project-microservices',
-        title: 'Cloud Computing Microservices',
-        organization: 'University project',
-        date: '2025',
-        start: 2025,
-        category: 'project',
-        technologies: ['Python', 'Go', 'Java', 'Swift', 'Node.js', 'Ruby', 'Kubernetes', 'Nginx'],
-        description: [
-            'Designed and deployed containerized services in multiple languages.',
-            'Implemented Nginx reverse proxy for performance and load balancing.',
-            'Managed multi-environment microservice orchestration via Kubernetes.'
-        ]
-    },
-    {
-        id: 'weekender-ireland',
-        title: 'WeekenderIreland – Domestic Tourism App',
-        organization: 'Personal project',
-        date: 'Present',
-        start: 2026,
-        category: 'project',
-        technologies: ['Flutter', 'Java (Spring Boot)', 'Firestore', 'Google Maps SDK'],
-        description: [
-            'A gamified tourism app for Ireland, displaying a map of activities to explore.',
-            'Users earn points for completing activities and can compare scores with friends.'
         ]
     },
     {
@@ -86,7 +64,7 @@ export const events: TimelineEvent[] = [
         title: 'A-Levels',
         organization: 'Ballymena Academy',
         date: '2021',
-        start: 2019,
+        year: 2021,
         category: 'education',
         description: [
             'Engineering (A*), Physics (C), Media (B)'
@@ -95,10 +73,13 @@ export const events: TimelineEvent[] = [
 ];
 
 export const technicalSkills = [
-    'Java', 'Python', 'JavaScript/TypeScript', 'React', 'Node.js',
-    'Spring Boot', 'AWS', 'GCP', 'Kubernetes', 'Docker',
-    'CI/CD', 'REST APIs', 'MongoDB', 'PostgreSQL',
-    'Git', 'Terraform', 'Spinnaker', 'Microservices'
+    'Terraform', 'Kubernetes', 'EKS', 'Helm', 'Istio', 'Docker', 'GitOps',
+    'AWS', 'Lambda', 'CloudWatch', 'GCP',
+    'Argo CD', 'Argo Workflows', 'CircleCI', 'Jenkins',
+    'OpenTelemetry', 'Prometheus', 'Grafana', 'Coralogix', 'Honeycomb',
+    'incident.io', 'PagerDuty',
+    'Go', 'Java', 'Python', 'JavaScript/TypeScript', 'Spring Boot',
+    'PostgreSQL', 'MongoDB', 'Redis'
 ];
 
 export const softSkills = [

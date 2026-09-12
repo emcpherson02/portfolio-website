@@ -1,109 +1,109 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Mail, MapPin, Calendar, FileText } from "lucide-react";
+import { Mail, MapPin, Briefcase, ArrowUpRight, Download } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
+import { SectionHeader } from "@/components/sections/SectionHeader";
+
+const DETAILS = [
+    { Icon: MapPin, label: "Location", value: "Belfast, United Kingdom" },
+    { Icon: Briefcase, label: "Work status", value: "Full-time Software Engineer" },
+];
+
+const LINKS = [
+    {
+        href: "https://linkedin.com/in/elliott-mcpherson",
+        label: "LinkedIn",
+        detail: "Connect with me professionally",
+        Icon: LinkedinIcon,
+    },
+    {
+        href: "https://github.com/emcpherson02",
+        label: "GitHub",
+        detail: "Projects and source code",
+        Icon: GithubIcon,
+    },
+];
 
 export function Contact() {
     return (
-        <section className="w-full py-16 sm:py-20 bg-background scroll-mt-16" id="contact">
+        <section id="contact" className="w-full py-20 sm:py-28 bg-background scroll-mt-16">
             <div className="container">
-                <div className="mb-10 sm:mb-16">
-                    <Badge variant="outline" className="mb-4">Contact</Badge>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-                        Get In Touch
-                    </h2>
-                    <p className="text-muted-foreground max-w-2xl">
-                        Feel free to reach out if you&#39;re looking for a developer, have a question, or just want to connect.
-                    </p>
-                </div>
+                <SectionHeader
+                    label="Contact"
+                    title="Get in touch"
+                    description="Feel free to reach out if you're looking for an engineer, have a question, or just want to connect."
+                />
 
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-                    <div className="lg:col-span-2 rounded-xl border bg-card p-6 sm:p-8 shadow-sm">
-                        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Contact Information</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16">
+                    {/* Details as a plain list. These were a bordered card
+                        containing four more bordered rows. */}
+                    <div className="lg:col-span-2">
+                        <a
+                            href="mailto:elliott.mcpherson985@gmail.com"
+                            className="group inline-flex items-start gap-3 text-lg font-medium hover:text-primary transition-colors"
+                        >
+                            <Mail className="h-5 w-5 mt-1 shrink-0 text-primary" aria-hidden="true" />
+                            <span className="break-all">
+                                elliott.mcpherson985@gmail.com
+                                <ArrowUpRight
+                                    className="inline h-4 w-4 ml-1 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                    aria-hidden="true"
+                                />
+                            </span>
+                        </a>
 
-                        <div className="space-y-5 sm:space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                    <MapPin className="h-5 w-5" aria-hidden="true" />
+                        <dl className="mt-8 space-y-5">
+                            {DETAILS.map(({ Icon, label, value }) => (
+                                <div key={label} className="flex items-start gap-3">
+                                    <Icon className="h-5 w-5 mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true" />
+                                    <div>
+                                        <dt className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+                                            {label}
+                                        </dt>
+                                        <dd className="mt-1">{value}</dd>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 className="font-medium">Location</h4>
-                                    <p className="text-muted-foreground">Belfast, United Kingdom</p>
-                                </div>
-                            </div>
+                            ))}
+                        </dl>
 
-                            <div className="flex items-start gap-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                    <Mail className="h-5 w-5" aria-hidden="true" />
-                                </div>
-                                <div>
-                                    <h4 className="font-medium">Email</h4>
-                                    <a
-                                        href="mailto:elliott.mcpherson985@gmail.com"
-                                        className="text-muted-foreground hover:text-primary transition-colors break-all"
-                                    >
-                                        elliott.mcpherson985@gmail.com
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div className="flex items-start gap-4">
-                                <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
-                                    <Calendar className="h-5 w-5" aria-hidden="true" />
-                                </div>
-                                <div>
-                                    <h4 className="font-medium">Work Status</h4>
-                                    <p className="text-muted-foreground">Open to full-time opportunities and freelance projects</p>
-                                </div>
-                            </div>
-                        </div>
+                        <Button asChild className="mt-9">
+                            <a href="/CV_Elliott_McPherson.pdf" download>
+                                Download CV
+                                <Download className="ml-1.5 h-4 w-4" aria-hidden="true" />
+                            </a>
+                        </Button>
                     </div>
 
-                    <div className="lg:col-span-3 rounded-xl border bg-card p-6 sm:p-8 shadow-sm">
-                        <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Connect With Me</h3>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div className="rounded-xl border p-6 flex flex-col items-center text-center">
-                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
-                                    <LinkedinIcon className="h-7 w-7 text-foreground" />
-                                </div>
-                                <h4 className="font-medium text-lg mb-2">LinkedIn</h4>
-                                <p className="text-muted-foreground text-sm mb-4">Connect with me professionally</p>
-                                <Button asChild variant="default" className="mt-auto w-full shadow-sm">
-                                    <a href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer">
-                                        View Profile
+                    {/* Rows rather than three cards inside a card. */}
+                    <div className="lg:col-span-3">
+                        <ul className="divide-y border-y">
+                            {LINKS.map(({ href, label, detail, Icon }) => (
+                                <li key={label}>
+                                    <a
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group flex items-center gap-4 py-5 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+                                    >
+                                        {/* A 10% tint rather than a solid fill: --primary
+                                            is a near-black slate, so filling it turned the
+                                            tile black on hover. */}
+                                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground transition-colors group-hover:bg-primary/10">
+                                            <Icon className="h-5 w-5" />
+                                        </span>
+                                        <span className="flex-1 min-w-0">
+                                            <span className="block font-medium">{label}</span>
+                                            <span className="block text-sm text-muted-foreground">{detail}</span>
+                                        </span>
+                                        <ArrowUpRight
+                                            className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                            aria-hidden="true"
+                                        />
                                     </a>
-                                </Button>
-                            </div>
-
-                            <div className="rounded-xl border p-6 flex flex-col items-center text-center">
-                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
-                                    <GithubIcon className="h-7 w-7 text-foreground" />
-                                </div>
-                                <h4 className="font-medium text-lg mb-2">GitHub</h4>
-                                <p className="text-muted-foreground text-sm mb-4">Check out my projects and code</p>
-                                <Button asChild variant="outline" className="mt-auto w-full shadow-sm">
-                                    <a href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer">
-                                        View Repositories
-                                    </a>
-                                </Button>
-                            </div>
-
-                            <div className="rounded-xl border p-6 flex flex-col items-center text-center sm:col-span-2">
-                                <div className="h-14 w-14 rounded-full bg-secondary/30 flex items-center justify-center mb-4">
-                                    <FileText className="h-7 w-7 text-foreground" aria-hidden="true" />
-                                </div>
-                                <h4 className="font-medium text-lg mb-2">Curriculum Vitae</h4>
-                                <p className="text-muted-foreground text-sm mb-4">Download my CV for a detailed overview of my experience and skills</p>
-                                <Button asChild variant="default" className="mt-auto w-full shadow-sm">
-                                    <a href="/CV_Elliott_McPherson.pdf" download>
-                                        Download CV
-                                    </a>
-                                </Button>
-                            </div>
-                        </div>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </div>

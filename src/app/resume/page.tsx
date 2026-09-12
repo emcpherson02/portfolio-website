@@ -2,17 +2,23 @@
 
 import { AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { Download, ExternalLink } from "lucide-react";
+import { Download, Mail, MapPin } from "lucide-react";
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import { InteractiveTimeline } from "@/components/resume/InteractiveTimeline";
 import { SkillList } from "@/components/resume/SkillList";
-import { PrintableResume } from "@/components/resume/PrintableResume";
 import { ResumeLoading } from "@/components/resume/ResumeLoading";
 import { CVTitle } from "@/components/resume/CVTitle";
-import { ResumeNav } from "@/components/resume/ResumeNav";
-import { ScrollButton } from "@/components/resume/ScrollButton";
 import { events, summary, technicalSkills, softSkills } from "@/data/resume";
+
+/** Section heading with a hairline rule, used instead of wrapping each block in a card. */
+function SectionHeading({ children }: { children: React.ReactNode }) {
+    return (
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground pb-2 mb-4 border-b">
+            {children}
+        </h2>
+    );
+}
 
 export default function ResumePage() {
     // The splash is decoration only. It overlays finished content rather than
@@ -24,98 +30,95 @@ export default function ResumePage() {
     return (
         <div className="bg-background">
             <AnimatePresence>
-                {showLoading && (
-                    <ResumeLoading onComplete={hideLoading} />
-                )}
+                {showLoading && <ResumeLoading onComplete={hideLoading} />}
             </AnimatePresence>
 
-            <div className="container py-16 sm:py-20">
-                <div className="mb-12">
-                    <div className="mb-10 text-center">
-                        <CVTitle delay={0.3} />
-                    </div>
+            <div className="container max-w-6xl py-16 sm:py-20">
+                <header className="mb-14">
+                    <CVTitle delay={0.3} />
 
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Resume</h1>
-                    <p className="text-muted-foreground max-w-3xl text-lg">
-                        My professional journey, skills, and experience as a software engineer.
+                    <p className="text-lg text-muted-foreground mt-5 max-w-2xl">
+                        Platform Engineer at Proofpoint, working on Kubernetes, cloud
+                        infrastructure and observability.
                     </p>
 
-                    <div className="mt-6 flex flex-wrap gap-4">
-                        <Button asChild className="shadow-md">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-4 text-sm text-muted-foreground">
+                        <span className="inline-flex items-center gap-1.5">
+                            <MapPin className="h-4 w-4" aria-hidden="true" />
+                            Belfast, United Kingdom
+                        </span>
+                        <a
+                            href="mailto:elliott.mcpherson985@gmail.com"
+                            className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
+                        >
+                            <Mail className="h-4 w-4" aria-hidden="true" />
+                            elliott.mcpherson985@gmail.com
+                        </a>
+                    </div>
+
+                    <div className="mt-7 flex flex-wrap gap-3">
+                        <Button asChild>
                             <a href="/CV_Elliott_McPherson.pdf" download>
-                                Download CV <Download className="ml-2 h-4 w-4" />
+                                Download CV <Download className="ml-2 h-4 w-4" aria-hidden="true" />
                             </a>
                         </Button>
                         <Button asChild variant="outline">
-                            <Link href="/#contact">
-                                Contact Me <ExternalLink className="ml-2 h-4 w-4" />
-                            </Link>
+                            <Link href="/#contact">Get in touch</Link>
                         </Button>
                     </div>
-                </div>
+                </header>
 
-                <ResumeNav />
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
-                    <div className="lg:col-span-1 space-y-8">
-                        <section className="bg-card rounded-xl p-6 border shadow-sm">
-                            <h2 className="text-xl font-bold border-b pb-2 mb-4">Professional Summary</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+                    <div className="lg:col-span-1 space-y-10">
+                        <section>
+                            <SectionHeading>Profile</SectionHeading>
                             <div className="space-y-4">
                                 {summary.map((paragraph) => (
-                                    <p key={paragraph} className="text-muted-foreground">{paragraph}</p>
+                                    <p key={paragraph} className="text-sm leading-relaxed text-muted-foreground">
+                                        {paragraph}
+                                    </p>
                                 ))}
                             </div>
                         </section>
 
-                        <section className="bg-card rounded-xl p-6 border shadow-sm">
-                            <h2 className="text-xl font-bold border-b pb-2 mb-4">Technical Skills</h2>
+                        <section>
+                            <SectionHeading>Technical Skills</SectionHeading>
                             <SkillList skills={technicalSkills} />
                         </section>
 
-                        <section className="bg-card rounded-xl p-6 border shadow-sm">
-                            <h2 className="text-xl font-bold border-b pb-2 mb-4">Soft Skills</h2>
+                        <section>
+                            <SectionHeading>Soft Skills</SectionHeading>
                             <SkillList skills={softSkills} />
                         </section>
                     </div>
 
-                    <div className="lg:col-span-2 space-y-8">
-                        <section className="bg-card rounded-xl p-6 border shadow-sm">
-                            <h2 className="text-xl font-bold border-b pb-2 mb-6">Professional Timeline</h2>
-                            <p className="text-muted-foreground mb-6">
-                                Select an entry to expand it and see more detail about that
-                                experience, qualification or project.
-                            </p>
-
+                    <div className="lg:col-span-2">
+                        <section>
+                            <SectionHeading>Experience &amp; Education</SectionHeading>
                             <InteractiveTimeline events={events} />
                         </section>
                     </div>
                 </div>
 
-                <section className="mt-12 bg-primary/5 rounded-xl p-8 border shadow-sm text-center">
-                    <h2 className="text-2xl font-bold mb-4">Looking for a Skilled Developer?</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-                        I&#39;m currently open to new opportunities in software development. If you&#39;re looking for a passionate developer with hands-on experience, let&#39;s connect!
+                {/* The one block that keeps a surface, so it reads as a call to
+                    action rather than another section of the document. */}
+                <section className="mt-16 rounded-xl border bg-muted/30 px-6 py-10 text-center">
+                    <h2 className="text-xl font-bold mb-3">Looking for a Skilled Engineer?</h2>
+                    <p className="text-muted-foreground max-w-xl mx-auto mb-6">
+                        If you&#39;re looking for a passionate engineer with hands-on experience, let&#39;s connect!
                     </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <Button asChild size="lg" className="shadow-md">
-                            <Link href="/#contact">
-                                Get in Touch
-                            </Link>
+                    <div className="flex flex-wrap justify-center gap-3">
+                        <Button asChild>
+                            <Link href="/#contact">Get in touch</Link>
                         </Button>
-                        <Button asChild variant="outline" size="lg">
+                        <Button asChild variant="outline">
                             <a href="/CV_Elliott_McPherson.pdf" download>
-                                Download CV <Download className="ml-2 h-4 w-4" />
+                                Download CV <Download className="ml-2 h-4 w-4" aria-hidden="true" />
                             </a>
                         </Button>
                     </div>
                 </section>
-
-                <div className="mt-8 text-center">
-                    <PrintableResume />
-                </div>
             </div>
-
-            <ScrollButton scrollToTop={false} />
         </div>
     );
 }

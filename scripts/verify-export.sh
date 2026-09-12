@@ -35,10 +35,18 @@ hidden=$(grep -rlE 'opacity: ?0[;"]' "$OUT" --include='*.html' 2>/dev/null || tr
 # ElastiCache and Ballymena are inside collapsed disclosure panels. They catch
 # the panel being conditionally rendered, which keeps role detail out of the
 # page entirely rather than merely collapsed.
-for term in "Rapid7" "Queen" "StudentWallet" "ElastiCache" "Ballymena"; do
+for term in "Proofpoint" "Rapid7" "Queen" "ElastiCache" "Ballymena"; do
     grep -q "$term" "$OUT/resume/index.html" 2>/dev/null \
         && check pass "resume HTML contains '$term'" \
         || check fail "resume HTML missing '$term' - content is gated behind JS"
+done
+
+# The homepage had only a size check, which a page of markup with no readable
+# text would still pass.
+for term in "Elliott McPherson" "Featured Projects" "StudentWallet" "Kubernetes"; do
+    grep -q "$term" "$OUT/index.html" 2>/dev/null \
+        && check pass "home HTML contains '$term'" \
+        || check fail "home HTML missing '$term'"
 done
 
 # A splash-only page is ~8KB; a real one is >25KB.

@@ -128,7 +128,8 @@
   }
 
   /* Cards carry borders and shadows that waste ink and add nothing on paper. */
-  [class*="rounded-xl"] {
+  [class*="rounded-xl"],
+  [class*="rounded-lg"] {
     border: 0 !important;
     box-shadow: none !important;
     background: transparent !important;
