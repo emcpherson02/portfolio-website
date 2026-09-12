@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, Twitter, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
@@ -48,28 +49,29 @@ export function Footer() {
                     </div>
 
                     <div className="space-y-3">
-                        <h3 className="font-medium">Resources</h3>
+                        <h3 className="font-medium">Elsewhere</h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
-                                    Blog
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/resources" className="text-sm text-muted-foreground hover:text-foreground">
-                                    Resources
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
+                                <a
                                     href="https://github.com/emcpherson02"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
                                 >
                                     GitHub
-                                    <ArrowUpRight className="h-3 w-3" />
-                                </Link>
+                                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://linkedin.com/in/elliott-mcpherson"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1"
+                                >
+                                    LinkedIn
+                                    <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -79,7 +81,7 @@ export function Footer() {
                         <ul className="space-y-2">
                             <li>
                                 <Link href="/#contact" className="text-sm text-muted-foreground hover:text-foreground">
-                                    Contact Form
+                                    Get in touch
                                 </Link>
                             </li>
                             <li>
@@ -118,7 +120,7 @@ export function Footer() {
                                 rel="noopener noreferrer"
                                 aria-label="GitHub"
                             >
-                                <Github className="h-4 w-4" />
+                                <GithubIcon className="h-4 w-4" />
                                 <span className="sr-only">GitHub</span>
                             </Link>
                         </Button>
@@ -129,19 +131,8 @@ export function Footer() {
                                 rel="noopener noreferrer"
                                 aria-label="LinkedIn"
                             >
-                                <Linkedin className="h-4 w-4" />
+                                <LinkedinIcon className="h-4 w-4" />
                                 <span className="sr-only">LinkedIn</span>
-                            </Link>
-                        </Button>
-                        <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">
-                            <Link
-                                href="https://twitter.com/elliotmcpherson"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Twitter"
-                            >
-                                <Twitter className="h-4 w-4" />
-                                <span className="sr-only">Twitter</span>
                             </Link>
                         </Button>
                         <Button variant="ghost" size="icon" asChild className="rounded-full h-8 w-8">

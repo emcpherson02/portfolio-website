@@ -1,37 +1,28 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { ArrowRight, Download, Github, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight, Download, Mail } from "lucide-react";
+import { GithubIcon, LinkedinIcon } from "@/components/icons/BrandIcons";
 import { InteractiveTerminal } from "@/components/InteractiveTerminal";
 
 export function Hero() {
     return (
-        <section className="w-full py-16 md:py-24 lg:py-32 xl:py-36 overflow-hidden">
+        <section id="home" className="w-full py-16 md:py-24 lg:py-32 xl:py-36 overflow-hidden scroll-mt-16">
             <div className="container relative">
-                {/* Background Elements */}
-                <div className="absolute inset-0 -z-10">
+                <div className="absolute inset-0 -z-10" aria-hidden="true">
                     <div className="absolute top-0 left-1/3 w-2/3 h-1/2 bg-primary/5 rounded-full blur-3xl" />
                     <div className="absolute bottom-1/4 right-0 w-1/2 h-1/2 bg-primary/10 rounded-full blur-3xl" />
                 </div>
 
-                {/* Content Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    {/* Left Column: Text Content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="flex flex-col space-y-6"
-                    >
+                    <div className="flex flex-col space-y-6">
                         <div className="space-y-3">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                                Hi, I&#39;m <span className="text-primary"> Elliott McPherson</span>
+                                Hi, I&#39;m <span className="text-primary">Elliott McPherson</span>
                             </h1>
-                            <h2 className="text-xl md:text-2xl text-muted-foreground">
+                            <p className="text-xl md:text-2xl text-muted-foreground">
                                 Full-Stack Developer specialising in modern web technologies
-                            </h2>
+                            </p>
                         </div>
 
                         <p className="text-muted-foreground max-w-md text-lg">
@@ -41,9 +32,9 @@ export function Hero() {
 
                         <div className="flex flex-wrap gap-4 pt-2">
                             <Button asChild size="lg" className="rounded-md shadow-lg">
-                                <Link href="/#projects">
-                                    View My Work <ArrowRight className="ml-1.5 h-4 w-4" />
-                                </Link>
+                                <a href="#projects">
+                                    View My Work <ArrowRight className="ml-1.5 h-4 w-4" aria-hidden="true" />
+                                </a>
                             </Button>
                             <Button
                                 asChild
@@ -51,13 +42,8 @@ export function Hero() {
                                 size="lg"
                                 className="rounded-md border-2 hover:bg-primary/10 hover:text-primary hover:border-primary transition-colors"
                             >
-                                <a
-                                    href="/CV_Elliott_McPherson.pdf"
-                                    download="Elliott_McPherson_CV.pdf"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    Download CV <Download className="ml-1.5 h-4 w-4" />
+                                <a href="/CV_Elliott_McPherson.pdf" download>
+                                    Download CV <Download className="ml-1.5 h-4 w-4" aria-hidden="true" />
                                 </a>
                             </Button>
                         </div>
@@ -71,9 +57,9 @@ export function Hero() {
                                     asChild
                                     className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
                                 >
-                                    <Link href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
-                                        <Github className="h-5 w-5" />
-                                    </Link>
+                                    <a href="https://github.com/emcpherson02" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                                        <GithubIcon className="h-5 w-5" />
+                                    </a>
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -81,9 +67,9 @@ export function Hero() {
                                     asChild
                                     className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
                                 >
-                                    <Link href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
-                                        <Linkedin className="h-5 w-5" />
-                                    </Link>
+                                    <a href="https://linkedin.com/in/elliott-mcpherson" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                                        <LinkedinIcon className="h-5 w-5" />
+                                    </a>
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -91,32 +77,27 @@ export function Hero() {
                                     asChild
                                     className="rounded-full h-10 w-10 border-2 hover:text-primary hover:border-primary transition-colors"
                                 >
-                                    <Link href="mailto:elliott.mcpherson985@gmail.com" aria-label="Email Me">
+                                    <a href="mailto:elliott.mcpherson985@gmail.com" aria-label="Email me">
                                         <Mail className="h-5 w-5" />
-                                    </Link>
+                                    </a>
                                 </Button>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
 
-                    {/* Right Column: Interactive Terminal */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="relative flex justify-center lg:justify-end"
-                    >
+                    <div className="relative flex justify-center lg:justify-end">
                         <div className="relative w-full max-w-md lg:max-w-lg">
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-primary/30 rounded-2xl blur opacity-30 animate-pulse"></div>
+                            <div
+                                className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-primary/30 rounded-2xl blur opacity-30 motion-safe:animate-pulse"
+                                aria-hidden="true"
+                            />
 
-                            {/* Interactive Terminal Component */}
                             <InteractiveTerminal />
 
-                            {/* Decorative Elements */}
-                            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
-                            <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
+                            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl" aria-hidden="true" />
+                            <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-full blur-xl" aria-hidden="true" />
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

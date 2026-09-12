@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal portfolio and CV for Elliott McPherson. Next.js App Router, exported
+as a static site and served from Firebase Hosting.
 
-First, run the development server:
+**Live:** not currently deployed.
+
+## Running it
+
+Requires Node 20.9 or newer (developed on 22).
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | What it does |
+|---|---|
+| `npm run dev` | Dev server. Fast, but see the warning below |
+| `npm run build` | Type-checks, then builds and exports to `out/` |
+| `npm run preview` | Builds and serves `out/` on :3001 — the real deployable output |
+| `npm run verify` | Builds, then asserts the export is actually shippable |
+| `npm run lint` | ESLint |
+| `npm run check:a11y` | axe against a running `preview` server |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Verify what you ship, not what dev shows you
 
-## Learn More
+`npm run dev` cannot catch a whole class of bug in this project, because the
+dev server hydrates immediately and the exported HTML is what actually gets
+deployed. Two real examples, both of which shipped in this repo:
 
-To learn more about Next.js, take a look at the following resources:
+- Motion serialises `initial` into the markup, so `initial={{ opacity: 0 }}`
+  put every section into the HTML invisible. With JS it looked fine; to a
+  crawler or link-preview bot the page was blank.
+- The resume gated all its content behind a 3-second timer, so the exported
+  `/resume` contained a loading splash and nothing else — no CV text at all.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`scripts/verify-export.sh` asserts against the built output: nothing ships at
+`opacity: 0`, the CV exists as text (including inside collapsed timeline
+panels), internal links carry trailing slashes so they hit the exported files
+directly, and the PDF was copied. **Run `npm run verify` before deploying.**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture
 
-## Deploy on Vercel
+Two routes, both client components — the site is animation-heavy and has no
+server-side data fetching.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `src/app/page.tsx` — the single-page portfolio, composing the sections in
+  `src/components/sections/`, each wrapped in `ScrollRevealSection`.
+- `src/app/resume/page.tsx` — the CV. Content comes from `src/data/resume.ts`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`ScrollRevealSection` renders visible on the server and only arms its hidden
+state once hydrated, so nothing reaches the HTML invisible. It uses
+`amount: "some"` deliberately: a numeric `amount` is measured against the
+element rather than the viewport, so a section taller than the viewport can
+never satisfy it and stays hidden forever.
+
+Timeline disclosure panels are always rendered and toggled with `hidden`,
+rather than conditionally rendered, so role detail is in the page for
+crawlers and print while staying out of the accessibility tree when collapsed.
+
+## Styling
+
+Tailwind 4 with CSS-native config — there is no `tailwind.config.js`. Theme
+tokens live in `@theme inline` in `src/app/globals.css`, alongside the print
+stylesheet. UI primitives in `src/components/ui/` are shadcn/ui (new-york);
+add more with `npx shadcn add <component>` rather than hand-rolling them.
+
+There is no dark mode. The `@custom-variant dark` line in `globals.css` is
+load-bearing anyway — see the comment there before removing it.
+
+## Deployment
+
+Static export to Firebase Hosting, on a domain registered with GoDaddy.
+Pushing to `main` runs `.github/workflows/deploy.yml`, which lints, builds,
+runs the export checks above, and deploys only if they pass.
+
+### First-time setup
+
+```bash
+npm i -g firebase-tools
+firebase login
+firebase projects:create          # or use an existing project
+firebase use --add                # writes .firebaserc - commit it
+```
+
+`.firebaserc` is generated by the CLI rather than kept in the repo as a
+template. The CLI reads it on startup for nearly every command, so a file
+containing a placeholder id makes even `firebase login` fail.
+
+Then deploy by hand once to confirm it works:
+
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+### Custom domain
+
+Firebase console → Hosting → Add custom domain. It issues a TXT record for
+ownership, then A records for the domain itself.
+
+In GoDaddy's DNS manager, add the TXT record first, then the A records once
+Firebase shows them. Remove any parked-page A records GoDaddy created at
+signup, or certificate provisioning will not complete. SSL is issued
+automatically and usually lands within a few hours.
+
+Unlike a CNAME-based CDN, Firebase serves the apex directly from A records, so
+`elliottmcpherson-portfolio.co.uk` works without a redirect to `www`.
+
+### CI credentials
+
+```bash
+firebase init hosting:github
+```
+
+That creates a service account and writes `FIREBASE_SERVICE_ACCOUNT` into the
+repository secrets. Also add a repository **variable** `FIREBASE_PROJECT_ID`
+with the project id.
+
+### Cost
+
+The Spark plan is free with no time limit: 10 GB stored, 360 MB/day
+transferred — roughly 900 full page loads a day for this site. Exceeding a
+quota pauses serving until the next window rather than generating a bill, and
+no card is required.

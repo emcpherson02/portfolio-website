@@ -1,8 +1,9 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ChevronUp, ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 
 interface ScrollButtonProps {
@@ -62,7 +63,11 @@ export function ScrollButton({ scrollToTop = true, className }: ScrollButtonProp
         <AnimatePresence>
             {isVisible && (
                 <motion.div
-                    className={`fixed right-6 z-40 ${scrollToTop ? 'bottom-6' : 'top-20'} ${className}`}
+                    className={cn(
+                        "fixed right-6 z-40 print:hidden",
+                        scrollToTop ? "bottom-6" : "top-20",
+                        className
+                    )}
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.5 }}
